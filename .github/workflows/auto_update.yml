@@ -17,12 +17,19 @@ jobs:
         with:
           python-version: '3.9'
 
+      - name: Instalar Google Chrome
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y google-chrome-stable
+
       - name: Instalar dependências
         run: |
           pip install undetected-chromedriver selenium requests
 
       - name: Rodar script
-        run: python verificador.py # Certifique-se que o nome do seu arquivo é esse mesmo
+        env:
+          MEU_TOKEN_GITHUB: ${{ secrets.MEU_TOKEN_GITHUB }}
+        run: python verificador.py
 
       - name: Commit e Push das mudanças
         run: |
