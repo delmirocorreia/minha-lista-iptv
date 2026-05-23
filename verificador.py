@@ -75,5 +75,5 @@ def processar_m3u():
     novo_conteudo = "".join(linhas)
     atualizar_repositorio(novo_conteudo)
     
- if __name__ == "__main__":
+if __name__ == "__main__":
       processar_m3u()
