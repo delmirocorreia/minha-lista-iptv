@@ -2,6 +2,8 @@ import undetected_chromedriver as uc
 import re
 import time
 import base64
+import os
+GITHUB_TOKEN = os.getenv("MEU_TOKEN_GITHUB")
 from github import Github
 from github import Auth
 
@@ -35,8 +37,12 @@ def processar_m3u():
         linhas = f.readlines()
 
     options = uc.ChromeOptions()
-    options.add_argument("--headless") # Roda sem abrir o navegador visualmente
-    driver = uc.Chrome(options=options, version_main=148)
+    options.add_argument("--headless=new") # Importante para rodar no servidor
+    options.add_argument("--no-sandbox")
+    options.add_argument("--disable-dev-shm-usage")
+    
+    # Removido version_main=148 para não dar erro
+    driver = uc.Chrome(options=options)
 
     for i in range(len(linhas)):
         if '#EXTINF' in linhas[i] and 'tvg-id="' in linhas[i]:
@@ -58,7 +64,7 @@ def processar_m3u():
                         print(f"✨ Atualizado: {canal_id}")
                         linhas[i+1] = url_nova + "\n"
                 else:
-                    print(f"⚠️ Não encontrei o link para {canal_id}")
+                    print(f"⚠️ Não há atualização para {canal_id}")
 
     driver.quit()
     
