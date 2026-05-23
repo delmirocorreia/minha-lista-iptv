@@ -32,14 +32,14 @@ def atualizar_repositorio(novo_conteudo):
 
 def processar_m3u():
    # 1. Instalação e configuração do Chrome dentro da função
-    chromedriver_autoinstaller.install() 
+    driver_path = chromedriver_autoinstaller.install() 
     
     options = uc.ChromeOptions()
     options.add_argument("--headless=new")
     options.add_argument("--no-sandbox")
     options.add_argument("--disable-dev-shm-usage")
     
-    driver = uc.Chrome(options=options)
+    driver = uc.Chrome(options=options, driver_executable_path=driver_path)
     
     # 2. Leitura do arquivo
     with open(ARQUIVO_M3U, "r", encoding="utf-8") as f:
