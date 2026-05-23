@@ -24,7 +24,10 @@ jobs:
       - name: Instalar Google Chrome
         run: |
           sudo apt-get update
-          sudo apt-get install -y google-chrome-stable
+          # Tenta instalar, mas ignora se já estiver instalado na versão mais recente
+          sudo apt-get install -y google-chrome-stable || true
+          # Agora trava a versão para não mudar durante o processo
+          sudo apt-mark hold google-chrome-stable
 
       - name: Instalar dependências
         run: |
