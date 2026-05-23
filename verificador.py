@@ -1,17 +1,15 @@
 import undetected_chromedriver as uc
+import chromedriver_autoinstaller
 import re
 import time
-import base64
 import os
-GITHUB_TOKEN = os.getenv("MEU_TOKEN_GITHUB")
-from github import Github
-from github import Auth
+from github import Github, Auth
 
 # --- CONFIGURAÇÕES ---
 ARQUIVO_M3U = "index.m3u"
 URL_BASE = "https://ww2.embedtv.lat/"
-
-REPO_NAME = "delmirocorreia/minha-lista-iptv" # Seu usuário/nome do repositório
+REPO_NAME = "delmirocorreia/minha-lista-iptv"
+GITHUB_TOKEN = os.getenv("MEU_TOKEN_GITHUB")
 
 def atualizar_repositorio(novo_conteudo):
     try:
@@ -33,17 +31,21 @@ def atualizar_repositorio(novo_conteudo):
         print(f"Erro ao atualizar GitHub: {e}")
 
 def processar_m3u():
-    with open(ARQUIVO_M3U, "r", encoding="utf-8") as f:
-        linhas = f.readlines()
-
+   # 1. Instalação e configuração do Chrome dentro da função
+    chromedriver_autoinstaller.install() 
+    
     options = uc.ChromeOptions()
-    options.add_argument("--headless=new") # Importante para rodar no servidor
+    options.add_argument("--headless=new")
     options.add_argument("--no-sandbox")
     options.add_argument("--disable-dev-shm-usage")
     
-    # Removido version_main=148 para não dar erro
     driver = uc.Chrome(options=options)
+    
+    # 2. Leitura do arquivo
+    with open(ARQUIVO_M3U, "r", encoding="utf-8") as f:
+        linhas = f.readlines()
 
+    # 3. Loop de processamento... (Seu código existente)
     for i in range(len(linhas)):
         if '#EXTINF' in linhas[i] and 'tvg-id="' in linhas[i]:
             canal_id = re.search(r'tvg-id="([^"]+)"', linhas[i]).group(1)
@@ -64,16 +66,14 @@ def processar_m3u():
                         print(f"✨ Atualizado: {canal_id}")
                         linhas[i+1] = url_nova + "\n"
                 else:
-                    print(f"⚠️ Não há atualização para {canal_id}")
+                    print(f"⚠️ Não há atualização para o canal {canal_id}")
 
     driver.quit()
-    
+
+    # 4. Atualização    
     # Salva o arquivo local e envia para o GitHub
     novo_conteudo = "".join(linhas)
-    with open(ARQUIVO_M3U, "w", encoding="utf-8") as f:
-        f.write(novo_conteudo)
-    
     atualizar_repositorio(novo_conteudo)
-
-if __name__ == "__main__":
-    processar_m3u()
+    
+ if __name__ == "__main__":
+      processar_m3u()
