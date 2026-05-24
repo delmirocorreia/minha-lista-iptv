@@ -17,6 +17,12 @@ def processar_espelho():
     # Configuração para extrair logs de rede via CDP
     options = uc.ChromeOptions()
     options.add_argument("--headless=new")
+    options.add_argument("--no-sandbox")
+    options.add_argument("--disable-dev-shm-usage")
+    
+    # É OBRIGATÓRIO definir o loggingPrefs aqui, antes de iniciar o driver
+    options.set_capability('goog:loggingPrefs', {'performance': 'ALL'})
+    
     driver = uc.Chrome(options=options, version_main=148)
     
     try:
