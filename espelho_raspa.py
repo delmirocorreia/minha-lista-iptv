@@ -31,7 +31,8 @@ def processar_espelho():
     time.sleep(15) 
     
     # 4. Captura bruta
-    html_final = driver.page_source
+   # html_final = driver.page_source
+    html_final = driver.execute_script("return document.documentElement.outerHTML;")
     
     # 5. Salvar localmente
     with open("debug_espelho.txt", "w", encoding="utf-8") as f:
