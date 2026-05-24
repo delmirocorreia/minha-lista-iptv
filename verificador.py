@@ -35,9 +35,12 @@ def processar_m3u():
     driver_path = chromedriver_autoinstaller.install() 
     
     options = uc.ChromeOptions()
+    options.add_argument("--incognito")  # Abre em modo anônimo, sem cache
     options.add_argument("--headless=new")
     options.add_argument("--no-sandbox")
     options.add_argument("--disable-dev-shm-usage")
+
+    options.add_argument("user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36")
     
     driver = uc.Chrome(options=options, driver_executable_path=driver_path)
     
@@ -58,7 +61,7 @@ def processar_m3u():
                 
                 html = driver.page_source
                 # Busca pelo link .css como você solicitou
-                match = re.search(r'(https:[^"\']*?style\.css)', html, re.IGNORECASE)
+                match = re.search(r'https?://[^\s"\'<>]+style\.css', html, re.IGNORECASE)
                 
                 if match:
                     url_nova = match.group(1)
