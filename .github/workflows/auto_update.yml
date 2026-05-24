@@ -36,4 +36,4 @@ jobs:
       - name: Rodar script
         env:
           MEU_TOKEN_GITHUB: ${{ secrets.MEU_TOKEN_GITHUB }}
-        run: python verificador.py
+        run: python VerificadorLocal.py
