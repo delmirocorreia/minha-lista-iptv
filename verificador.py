@@ -61,7 +61,7 @@ def processar_m3u():
                 
                 html = driver.page_source
                 # Busca pelo link .css como você solicitou
-                match = re.search(r'https?://[^\s"\'<>]+style\.css', html, re.IGNORECASE)
+                match = re.search(r'(https?://[^\s"\'<>]+style\.css)', html, re.IGNORECASE)
                 
                 if match:
                     url_nova = match.group(1)
