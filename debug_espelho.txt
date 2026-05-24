@@ -1,3 +1,1 @@
---- CONTEÚDO DO STYLE.CSS ---
-
-URL não encontrada no DOM
+Nenhuma URL de CSS encontrada no HTML bruto.
