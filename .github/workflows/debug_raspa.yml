@@ -1,4 +1,4 @@
-name: Atualizar Playlist
+name: Atualizar Playlist Teste
 
 on:
   schedule:
@@ -42,4 +42,4 @@ jobs:
       - name: Rodar script
         env:
           MEU_TOKEN_GITHUB: ${{ secrets.MEU_TOKEN_GITHUB }}
-        run: python debug_raspa.py
+        run: python espelho_raspa.py
