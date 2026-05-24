@@ -1,1 +1,39 @@
+name: Atualizar Playlist
 
+on:
+  schedule:
+    - cron: '0 */6 * * *'
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout do código
+        uses: actions/checkout@v3
+
+      - name: Fix Chrome Version
+        run: |
+          sudo apt-mark hold google-chrome-stable
+
+      - name: Instalar Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+
+      - name: Instalar Google Chrome
+        run: |
+          sudo apt-get update
+          # Tenta instalar, mas ignora se já estiver instalado na versão mais recente
+          sudo apt-get install -y google-chrome-stable || true
+          # Agora trava a versão para não mudar durante o processo
+          sudo apt-mark hold google-chrome-stable
+
+      - name: Instalar dependências
+        run: |
+          pip install undetected-chromedriver selenium requests PyGithub chromedriver-autoinstaller
+
+      - name: Rodar script
+        env:
+          MEU_TOKEN_GITHUB: ${{ secrets.MEU_TOKEN_GITHUB }}
+        run: python debug_raspa.py
