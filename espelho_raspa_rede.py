@@ -1,7 +1,6 @@
-from seleniumwire import webdriver
+import undetected_chromedriver as uc
 import time
 import os
-import json
 from github import Github, Auth
 
 # --- CONFIGURAÇÕES ---
@@ -10,56 +9,56 @@ REPO_NAME = "delmirocorreia/minha-lista-iptv"
 GITHUB_TOKEN = os.getenv("MEU_TOKEN_GITHUB")
 
 def processar_espelho():
-    # 0. Autenticação GitHub
     auth = Auth.Token(GITHUB_TOKEN)
     g = Github(auth=auth)
     repo = g.get_repo(REPO_NAME)
 
-    # 1. Configurações do Navegador para Selenium Wire
-    # O selenium-wire gerencia o Chrome internamente
-    chrome_options = {
-        'headless': True,
-        'args': ['--no-sandbox', '--disable-dev-shm-usage', '--user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36']
-    }
+    options = uc.ChromeOptions()
+    options.add_argument("--headless=new")
+    options.add_argument("--no-sandbox")
+    options.add_argument("--disable-dev-shm-usage")
     
-    driver = webdriver.Chrome(seleniumwire_options=chrome_options)
-    
-    # 2. Acessar o canal
-    canal_teste = "discoverychannel" 
-    print(f"🔍 [REDE] Iniciando captura de rede em: {canal_teste}")
+    driver = uc.Chrome(options=options, version_main=148)
     
     try:
-        driver.get(f"{URL_BASE}{canal_teste}")
-        time.sleep(20) # Tempo vital para o carregamento do CSS e da rede
+        driver.get(f"{URL_BASE}discoverychannel")
+        time.sleep(20)
         
-        # 3. Captura do conteúdo do CSS via rede
-        conteudo_css = "CSS NÃO ENCONTRADO"
-        for request in driver.requests:
-            if request.response and "style.css" in request.url:
-                conteudo_css = request.response.body.decode('utf-8', errors='ignore')
-                print(f"✅ CSS encontrado em: {request.url}")
-                break
-        
-        # 4. Salvar log de auditoria
-        debug_content = f"--- CONTEÚDO DO STYLE.CSS ---\n\n{conteudo_css}"
-        
-        with open("debug_espelho.txt", "w", encoding="utf-8") as f:
-            f.write(debug_content)
+        # O "pulo do gato": usamos JS para buscar o arquivo style.css e extrair o texto
+        # Isso contorna o problema de rede/proxy
+        conteudo_css = driver.execute_script("""
+            var cssContent = "CSS NÃO ENCONTRADO";
+            var styleSheets = document.styleSheets;
+            for (var i = 0; i < styleSheets.length; i++) {
+                try {
+                    if (styleSheets[i].href && styleSheets[i].href.includes('style.css')) {
+                        // Tenta buscar o conteúdo do arquivo via fetch
+                        return fetch(styleSheets[i].href)
+                            .then(response => response.text())
+                            .then(text => text);
+                    }
+                } catch(e) { continue; }
+            }
+            return cssContent;
+        """)
 
-        # 5. Enviar para o repositório
+        # Se o fetch retornar uma promise, aguardamos o resultado (tratativa simples)
+        if hasattr(conteudo_css, 'then'):
+            # Caso o JS retorne a promise, a forma mais fácil é ler via texto bruto da página
+            conteudo_css = "Conteúdo dinâmico carregado via JS, veja o log."
+
+        with open("debug_espelho.txt", "w", encoding="utf-8") as f:
+            f.write(f"--- CONTEÚDO DO STYLE.CSS ---\n\n{conteudo_css}")
+
         with open("debug_espelho.txt", "r", encoding="utf-8") as f:
             conteudo = f.read()
 
         try:
             file_info = repo.get_contents("debug_espelho.txt")
-            repo.update_file(file_info.path, "Debug: Atualizando log de rede", conteudo, file_info.sha)
+            repo.update_file(file_info.path, "Debug: Atualizando CSS", conteudo, file_info.sha)
         except:
-            repo.create_file("debug_espelho.txt", "Debug: Criando log de rede", conteudo)
+            repo.create_file("debug_espelho.txt", "Debug: Criando log CSS", conteudo)
             
-        print("🚀 Processo concluído com sucesso!")
-        
-    except Exception as e:
-        print(f"❌ Ocorreu um erro: {e}")
     finally:
         driver.quit()
 
