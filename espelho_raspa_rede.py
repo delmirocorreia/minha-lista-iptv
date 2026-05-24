@@ -1,8 +1,7 @@
 import undetected_chromedriver as uc
 import time
 import os
-import requests
-import re
+import json
 from github import Github, Auth
 
 # --- CONFIGURAÇÕES ---
@@ -15,44 +14,39 @@ def processar_espelho():
     g = Github(auth=auth)
     repo = g.get_repo(REPO_NAME)
 
+    # Configuração para extrair logs de rede via CDP
     options = uc.ChromeOptions()
     options.add_argument("--headless=new")
     driver = uc.Chrome(options=options, version_main=148)
     
     try:
         driver.get(f"{URL_BASE}discoverychannel")
-        time.sleep(15)
+        time.sleep(20) # Tempo maior para capturar carregamento
         
-        # Captura o HTML bruto de toda a página
-        html_page = driver.page_source
+        # Coleta todos os logs de performance
+        logs = driver.get_log('performance')
         
-        # Usa Regex para encontrar qualquer link que termine em .css
-        # Isso busca URLs dentro de scripts, tags de style, etc.
-        urls_css = re.findall(r'https?://[^\s<>"]+\.css', html_page)
+        urls_capturadas = []
+        for entry in logs:
+            log = json.loads(entry['message'])['message']
+            if log['method'] == 'Network.responseReceived':
+                url = log['params']['response']['url']
+                urls_capturadas.append(url)
         
-        conteudo_final = "Nenhuma URL de CSS encontrada no HTML bruto."
+        # Filtra apenas o que parece ser CSS ou JS importante
+        debug_output = "\n".join([u for u in urls_capturadas if ".css" in u or "assets" in u])
         
-        if urls_css:
-            # Pega a primeira URL que encontrar
-            css_url = urls_css[0]
-            print(f"🔗 URL encontrada via Regex: {css_url}")
-            
-            headers = {'User-Agent': 'Mozilla/5.0'}
-            response = requests.get(css_url, headers=headers)
-            conteudo_final = f"--- URL: {css_url} ---\n\n{response.text}"
-        
-        # Salvar o log
         with open("debug_espelho.txt", "w", encoding="utf-8") as f:
-            f.write(conteudo_final)
+            f.write(f"--- TODOS OS RECURSOS CARREGADOS (REDE) ---\n\n{debug_output}")
 
         with open("debug_espelho.txt", "r", encoding="utf-8") as f:
             conteudo = f.read()
 
         try:
             file_info = repo.get_contents("debug_espelho.txt")
-            repo.update_file(file_info.path, "Debug: Captura Regex [skip ci]", conteudo, file_info.sha)
+            repo.update_file(file_info.path, "Debug: Captura Rede [skip ci]", conteudo, file_info.sha)
         except:
-            repo.create_file("debug_espelho.txt", "Debug: Captura Regex [skip ci]", conteudo)
+            repo.create_file("debug_espelho.txt", "Debug: Captura Rede [skip ci]", conteudo)
             
     finally:
         driver.quit()
