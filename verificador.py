@@ -57,10 +57,24 @@ def processar_m3u():
             if "embedtv" in url_antiga:
                 print(f"🔄 Checando {canal_id}...")
                 driver.get(f"{URL_BASE}{canal_id}")
-                time.sleep(5)
+                # Aguarda até 10 segundos até que o elemento CSS apareça
+                from selenium.webdriver.common.by import By
+                from selenium.webdriver.support.ui import WebDriverWait
+                from selenium.webdriver.support import expected_conditions as EC
+
+                try:
+                    # Espera algo específico da página carregar (ex: um elemento que contenha 'style')
+                    WebDriverWait(driver, 10).until(
+                        lambda d: "style.css" in d.page_source
+                    )
+                except:
+                    print(f"⚠️ Timeout: Não encontrei 'style.css' na página de {canal_id}")
                 
                 html = driver.page_source
-                # Busca pelo link .css como você solicitou
+                if "style.css" not in html:
+                    print(f"DEBUG: O código fonte de {canal_id} NÃO contém 'style.css'.")
+                    
+                # Busca pelo link .css
                 match = re.search(r'(https?://[^\s"\'<>]+style\.css)', html, re.IGNORECASE)
                 
                 if match:
