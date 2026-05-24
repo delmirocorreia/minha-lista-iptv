@@ -10,13 +10,24 @@ URL_BASE = "https://ww2.embedtv.lat/"
 
 def processar_espelho():
     # 1. Configurações de "Fingimento" Total
+   # options = uc.ChromeOptions()
+   # options.add_argument("--headless=new")
+   # options.add_argument("--no-sandbox")
+   # options.add_argument("--disable-dev-shm-usage")
+   # options.add_argument("user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36")
+    
+   # driver = uc.Chrome(options=options, use_subprocess=True)
+
+    driver_path = chromedriver_autoinstaller.install() 
+    
     options = uc.ChromeOptions()
+    options.add_argument("--incognito")  # Abre em modo anônimo, sem cache
     options.add_argument("--headless=new")
     options.add_argument("--no-sandbox")
     options.add_argument("--disable-dev-shm-usage")
-    options.add_argument("user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36")
+    options.add_argument("user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36")
     
-    driver = uc.Chrome(options=options, use_subprocess=True)
+    driver = uc.Chrome(options=options, driver_executable_path=driver_path)
 
     # 2. Testar apenas 1 canal para não gastar tempo de Actions
     canal_teste = "discoverychannel" 
