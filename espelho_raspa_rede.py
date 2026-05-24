@@ -2,6 +2,7 @@ import undetected_chromedriver as uc
 import time
 import os
 import requests
+import re
 from github import Github, Auth
 
 # --- CONFIGURAÇÕES ---
@@ -20,38 +21,38 @@ def processar_espelho():
     
     try:
         driver.get(f"{URL_BASE}discoverychannel")
-        time.sleep(10)
+        time.sleep(15)
         
-        # 1. Captura a URL do CSS via Selenium
-        css_url = driver.execute_script("""
-            var links = document.getElementsByTagName('link');
-            for(var i=0; i<links.length; i++) {
-                if(links[i].href.includes('style.css')) return links[i].href;
-            }
-            return null;
-        """)
+        # Captura o HTML bruto de toda a página
+        html_page = driver.page_source
         
-        conteudo_css = "URL não encontrada no DOM"
+        # Usa Regex para encontrar qualquer link que termine em .css
+        # Isso busca URLs dentro de scripts, tags de style, etc.
+        urls_css = re.findall(r'https?://[^\s<>"]+\.css', html_page)
         
-        if css_url:
-            print(f"🔗 URL encontrada: {css_url}")
-            # 2. BAIXA O ARQUIVO USANDO REQUESTS (Ignora proteções do JS)
-            headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)'}
+        conteudo_final = "Nenhuma URL de CSS encontrada no HTML bruto."
+        
+        if urls_css:
+            # Pega a primeira URL que encontrar
+            css_url = urls_css[0]
+            print(f"🔗 URL encontrada via Regex: {css_url}")
+            
+            headers = {'User-Agent': 'Mozilla/5.0'}
             response = requests.get(css_url, headers=headers)
-            conteudo_css = response.text
+            conteudo_final = f"--- URL: {css_url} ---\n\n{response.text}"
         
-        # 3. Salvar e Enviar
+        # Salvar o log
         with open("debug_espelho.txt", "w", encoding="utf-8") as f:
-            f.write(f"--- CONTEÚDO DO STYLE.CSS ---\n\n{conteudo_css}")
+            f.write(conteudo_final)
 
         with open("debug_espelho.txt", "r", encoding="utf-8") as f:
             conteudo = f.read()
 
         try:
             file_info = repo.get_contents("debug_espelho.txt")
-            repo.update_file(file_info.path, "Debug: Captura Direta", conteudo, file_info.sha)
+            repo.update_file(file_info.path, "Debug: Captura Regex [skip ci]", conteudo, file_info.sha)
         except:
-            repo.create_file("debug_espelho.txt", "Debug: Captura Direta", conteudo)
+            repo.create_file("debug_espelho.txt", "Debug: Captura Regex [skip ci]", conteudo)
             
     finally:
         driver.quit()
