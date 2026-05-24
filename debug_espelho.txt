@@ -1,4 +1,5 @@
---- URLS DE CSS ENCONTRADAS NA REDE ---
+--- TODOS OS RECURSOS CARREGADOS (REDE) ---
 
 chrome://resources/css/roboto.css
 chrome://resources/cr_elements/cr_a11y_announcer/cr_a11y_announcer.css
+https://ww2.embedtv.lat/assets/icon.png
