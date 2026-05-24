@@ -29,10 +29,12 @@ jobs:
           # Agora trava a versão para não mudar durante o processo
           sudo apt-mark hold google-chrome-stable
 
-      - name: Instalar Dependências do Sistema
+      - name: Instalar dependências
         run: |
-          sudo apt-get update
-          sudo apt-get install -y xvfb chromium-browser
+          pip install --upgrade pip
+          pip install undetected-chromedriver selenium requests PyGithub
+          # O comando de remoção vai aqui:
+          pip uninstall -y chromedriver-autoinstaller
 
       - name: Instalar Driver Específico
         run: |
