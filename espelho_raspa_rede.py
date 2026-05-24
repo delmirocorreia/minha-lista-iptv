@@ -14,30 +14,39 @@ def processar_espelho():
     g = Github(auth=auth)
     repo = g.get_repo(REPO_NAME)
 
-    # Configuração para extrair logs de rede via CDP
+    # 1. Configuração Correta de Log de Performance
     options = uc.ChromeOptions()
     options.add_argument("--headless=new")
+    options.add_argument("--no-sandbox")
+    options.add_argument("--disable-dev-shm-usage")
+    
+    # É OBRIGATÓRIO definir o loggingPrefs aqui, antes de iniciar o driver
+    options.set_capability('goog:loggingPrefs', {'performance': 'ALL'})
+    
     driver = uc.Chrome(options=options, version_main=148)
     
     try:
         driver.get(f"{URL_BASE}discoverychannel")
-        time.sleep(20) # Tempo maior para capturar carregamento
+        time.sleep(20)
         
-        # Coleta todos os logs de performance
+        # Agora o get_log('performance') deve funcionar
         logs = driver.get_log('performance')
         
         urls_capturadas = []
         for entry in logs:
-            log = json.loads(entry['message'])['message']
-            if log['method'] == 'Network.responseReceived':
-                url = log['params']['response']['url']
-                urls_capturadas.append(url)
+            try:
+                log = json.loads(entry['message'])['message']
+                if log['method'] == 'Network.responseReceived':
+                    url = log['params']['response']['url']
+                    urls_capturadas.append(url)
+            except:
+                continue
         
-        # Filtra apenas o que parece ser CSS ou JS importante
-        debug_output = "\n".join([u for u in urls_capturadas if ".css" in u or "assets" in u])
+        # Filtra apenas o que parece ser CSS
+        debug_output = "\n".join([u for u in urls_capturadas if ".css" in u])
         
         with open("debug_espelho.txt", "w", encoding="utf-8") as f:
-            f.write(f"--- TODOS OS RECURSOS CARREGADOS (REDE) ---\n\n{debug_output}")
+            f.write(f"--- URLS DE CSS ENCONTRADAS NA REDE ---\n\n{debug_output}")
 
         with open("debug_espelho.txt", "r", encoding="utf-8") as f:
             conteudo = f.read()
