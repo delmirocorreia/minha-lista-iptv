@@ -4,12 +4,17 @@ import os
 from github import Github, Auth
 
 # --- CONFIGURAÇÕES ---
-ARQUIVO_M3U = "index.m3u"
 URL_BASE = "https://ww2.embedtv.lat/"
-# ... resto das configs iguais ...
+REPO_NAME = "delmirocorreia/minha-lista-iptv" 
+GITHUB_TOKEN = os.getenv("MEU_TOKEN_GITHUB")
 
 def processar_espelho():
-    # 1. Configurações de "Fingimento" Total
+    # 0. Inicializar autenticação do GitHub
+    auth = Auth.Token(GITHUB_TOKEN)
+    g = Github(auth=auth)
+    repo = g.get_repo(REPO_NAME)
+
+    # 1. Configurações do Navegador
     options = uc.ChromeOptions()
     options.add_argument("--headless=new")
     options.add_argument("--no-sandbox")
@@ -18,34 +23,32 @@ def processar_espelho():
     
     driver = uc.Chrome(options=options, version_main=148)
 
-   # driver_path = chromedriver_autoinstaller.install() 
-    
-   # options = uc.ChromeOptions()
-   # options.add_argument("--incognito")  # Abre em modo anônimo, sem cache
-   # options.add_argument("--headless=new")
-   # options.add_argument("--no-sandbox")
-   # options.add_argument("--disable-dev-shm-usage")
-   # options.add_argument("user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36")
-    
-   # driver = uc.Chrome(options=options, driver_executable_path=driver_path)
-
-    # 2. Testar apenas 1 canal para não gastar tempo de Actions
+    # 2. Teste
     canal_teste = "discoverychannel" 
     print(f"🔍 [ESPELHO] Iniciando teste em: {canal_teste}")
     
     driver.get(f"{URL_BASE}{canal_teste}")
-    
-    # 3. Espera "Paciente" (Humana)
     time.sleep(15) 
     
-    # 4. Captura bruta do que o navegador renderizou após o JS
+    # 4. Captura bruta
     html_final = driver.page_source
     
-    # 5. Salvar o log de auditoria no repositório
+    # 5. Salvar localmente
     with open("debug_espelho.txt", "w", encoding="utf-8") as f:
         f.write(html_final)
+
+    # 6. Enviar para o GitHub
+    with open("debug_espelho.txt", "r", encoding="utf-8") as f:
+        conteudo = f.read()
+
+    try:
+        file_info = repo.get_contents("debug_espelho.txt")
+        repo.update_file(file_info.path, "Debug: Atualizando log", conteudo, file_info.sha)
+        print("🚀 debug_espelho.txt atualizado!")
+    except:
+        repo.create_file("debug_espelho.txt", "Debug: Criando log", conteudo)
+        print("🚀 debug_espelho.txt criado!")
     
-    print("✅ Raspagem concluída. Verifique o arquivo debug_espelho.txt no repositório.")
     driver.quit()
 
 if __name__ == "__main__":
