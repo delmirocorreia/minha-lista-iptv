@@ -9,15 +9,34 @@ URL_BASE = "https://ww2.embedtv.lat/"
 REPO_NAME = "delmirocorreia/minha-lista-iptv"
 GITHUB_TOKEN = os.getenv("MEU_TOKEN_GITHUB")
 
+def atualizar_repositorio(novo_conteudo):
+    try:
+        auth = Auth.Token(GITHUB_TOKEN)
+        g = Github(auth=auth)
+        repo = g.get_repo(REPO_NAME)
+        conteudo_arquivo = repo.get_contents(ARQUIVO_M3U)
+        repo.update_file(
+            path=conteudo_arquivo.path,
+            message="Automação: Atualizando lista de canais",
+            content=novo_conteudo,
+            sha=conteudo_arquivo.sha
+        )
+        print("🚀 Repositório atualizado com sucesso!")
+    except Exception as e:
+        print(f"Erro ao atualizar GitHub: {e}")
+
 def processar_m3u():
+    # Carrega o arquivo local
     with open(ARQUIVO_M3U, "r", encoding="utf-8") as f:
         linhas = f.readlines()
 
+    # Inicia o navegador
     with sync_playwright() as p:
         browser = p.chromium.launch(headless=True)
         page = browser.new_page()
         page.set_extra_http_headers({"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"})
 
+        # Processa cada linha
         for i in range(len(linhas)):
             if '#EXTINF' in linhas[i] and 'tvg-id="' in linhas[i]:
                 canal_id = re.search(r'tvg-id="([^"]+)"', linhas[i]).group(1)
@@ -47,10 +66,12 @@ def processar_m3u():
         
         browser.close()
     
-    # Estas linhas abaixo estão FORA do 'with sync_playwright', 
-    # por isso devem estar alinhadas com o 'with' (4 espaços)
+    # Salva as mudanças
     novo_conteudo = "".join(linhas)
     with open(ARQUIVO_M3U, "w", encoding="utf-8") as f:
         f.write(novo_conteudo)
     
     atualizar_repositorio(novo_conteudo)
+
+if __name__ == "__main__":
+    processar_m3u()
