@@ -3,26 +3,25 @@ from playwright.sync_api import sync_playwright
 import playwright_stealth
 
 # --- CONFIGURAÇÕES ---
-URL_TESTE = "https://ww2.embedtv.lat/discoverychannel" 
+URL_TESTE = "https://ww2.embedtv.lat/" 
 
 def capturar_html_stealth():
     with sync_playwright() as p:
         browser = p.chromium.launch(headless=True)
         page = browser.new_page()
         
-        # Acesso direto ao módulo importado como "playwright_stealth"
-        # O método correto na maioria das versões é acessar o atributo "stealth"
+        # Aplicação segura do Stealth
         try:
-            playwright_stealth.stealth(page)
-            print("✅ Stealth aplicado com sucesso!")
+            # Tenta acessar o atributo 'stealth' dentro do módulo
+            if hasattr(playwright_stealth, 'stealth'):
+                playwright_stealth.stealth(page)
+                print("✅ Stealth aplicado via stealth()")
+            else:
+                # Fallback para versões onde a função se chama 'stealth_sync'
+                playwright_stealth.stealth_sync(page)
+                print("✅ Stealth aplicado via stealth_sync()")
         except Exception as e:
             print(f"⚠️ Erro ao aplicar stealth: {e}")
-            # Se falhar, tentamos a forma alternativa de alguns pacotes
-            try:
-                playwright_stealth.stealth_sync(page)
-                print("✅ Stealth aplicado via stealth_sync!")
-            except:
-                print("❌ Não foi possível aplicar stealth, continuando sem...")
 
         print(f"🔄 Acessando: {URL_TESTE}")
         
