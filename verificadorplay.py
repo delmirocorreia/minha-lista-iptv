@@ -1,6 +1,5 @@
 import re
 import os
-import playwright_stealth
 from playwright.sync_api import sync_playwright
 from github import Github, Auth
 
@@ -31,13 +30,13 @@ def processar_m3u():
         linhas = f.readlines()
 
     with sync_playwright() as p:
-        browser = p.chromium.launch(headless=True)
-        page = browser.new_page()
+        # Lançamento do navegador com argumentos anti-bot
+        browser = p.chromium.launch(headless=True, args=["--disable-blink-features=AutomationControlled"])
+        context = browser.new_context(user_agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36")
+        page = context.new_page()
         
-        # Chamada corrigida para evitar erro de callable
-        playwright_stealth.stealth(page)
-        
-        page.set_extra_http_headers({"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"})
+        # Esconde que é um robô do Playwright
+        page.add_init_script("Object.defineProperty(navigator, 'webdriver', {get: () => undefined})")
 
         for i in range(len(linhas)):
             if '#EXTINF' in linhas[i] and 'tvg-id="' in linhas[i]:
@@ -50,11 +49,9 @@ def processar_m3u():
                         page.goto(f"{URL_BASE}{canal_id}")
                         page.wait_for_load_state("networkidle")
                         
-                        # Tenta forçar o clique no botão de player
                         try:
-                            page.click('.vjs-big-play-button', timeout=3000)
-                            print(f"   🖱️ Clique de Play forçado em {canal_id}")
-                            page.wait_for_timeout(2000)
+                            page.click('.vjs-big-play-button', timeout=5000)
+                            page.wait_for_timeout(3000)
                         except:
                             pass
 
@@ -67,18 +64,23 @@ def processar_m3u():
                                 print(f"✨ Atualizado: {canal_id}")
                                 linhas[i+1] = url_nova + "\n"
                             else:
-                                print(f"✅ {canal_id} está ok.")
+                                print(f"✅ {canal_id} ok.")
                         else:
                             print(f"⚠️ Link não encontrado para {canal_id}")
                             page.screenshot(path=f"debug_{canal_id}.png")
                     except Exception as e:
-                        print(f"Erro ao processar {canal_id}: {e}")
+                        print(f"Erro: {e}")
         
         browser.close()
     
     novo_conteudo = "".join(linhas)
     with open(ARQUIVO_M3U, "w", encoding="utf-8") as f:
         f.write(novo_conteudo)
+    
+    atualizar_repositorio(novo_conteudo)
+
+if __name__ == "__main__":
+    processar_m3u()
     
     atualizar_repositorio(novo_conteudo)
 
