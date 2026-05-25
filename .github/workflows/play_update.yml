@@ -1,35 +1,29 @@
 name: Atualizador
 
 on:
-  schedule:
-    - cron: '0 * * * *'
   workflow_dispatch:
+  schedule:
+    - cron: '0 0 * * *'
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout do código
-        uses: actions/checkout@v3
-
-      - name: Instalar Python
-        uses: actions/setup-python@v4
+      - uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
         with:
-          python-version: '3.9'
-
-      - name: Instalar Playwright e Dependências
+          python-version: '3.10'
+      - name: Instalar dependências
         run: |
-          pip install playwright PyGithub playwright-stealth
+          pip install playwright PyGithub
           playwright install chromium
-          playwright install-deps
-
       - name: Rodar script
         env:
           MEU_TOKEN_GITHUB: ${{ secrets.MEU_TOKEN_GITHUB }}
         run: python verificadorplay.py
-
-      - name: Salvar screenshots em caso de erro
-        if: always()  # Isso garante que ele tente salvar mesmo se o script falhar
+      - name: Salvar Debug
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: debug-screenshots
