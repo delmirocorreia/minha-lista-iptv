@@ -61,10 +61,7 @@ def processar_m3u():
                         else:
                             print(f"⚠️ Link não encontrado para {canal_id}")
                             page.screenshot(path=f"debug_{canal_id}.png")                           
-                            
-                  #  except Exception as e:
-                  #      print(f"Erro ao processar {canal_id}: {e}")
-
+         
         browser.close()
     
     novo_conteudo = "".join(linhas)
