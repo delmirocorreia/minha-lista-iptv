@@ -32,22 +32,22 @@ def processar_m3u():
     with open(ARQUIVO_M3U, "r", encoding="utf-8") as f:
         linhas = f.readlines()
 
-    # Inicializa a variável no início para evitar o erro NameError se algo falhar
     novo_conteudo = "".join(linhas)
 
     with sync_playwright() as p:
         browser = p.chromium.launch(headless=True, args=["--disable-blink-features=AutomationControlled"])
         
-        # Definimos uma resolução de ecrã fixa de 1280x720 para os cliques serem exatos
         context = browser.new_context(
             user_agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
             viewport={"width": 1280, "height": 720}
         )
         
-        # 🔥 TRUQUE MESTRE ANTI-POPUP: Fecha na hora qualquer aba de anúncio que o site tentar abrir
-        context.on("page", lambda popup: popup.close())
-
+        # Criamos a página principal primeiro
         page = context.new_page()
+        
+        # O destruidor de anúncios agora atua SÓ na página principal
+        page.on("popup", lambda popup: popup.close())
+        
         page.add_init_script("Object.defineProperty(navigator, 'webdriver', {get: () => undefined})")
 
         for i in range(len(linhas)):
@@ -59,7 +59,6 @@ def processar_m3u():
                     
                     url_capturada = []
                     
-                    # Monitoriza a rede para pescar o falso .css assim que ele surgir
                     def interceptar(response):
                         if "style.css" in response.url and "embedtv" in response.url:
                             url_capturada.append(response.url)
@@ -70,11 +69,11 @@ def processar_m3u():
                         page.goto(f"{URL_BASE}{canal_id}", timeout=30000)
                         page.wait_for_load_state("networkidle")
                         
-                        # Clique 1: Clica no corpo da página para desarmar o anúncio invisível inicial
+                        # Clique 1: Desarmar anúncio invisível
                         page.click("body")
                         page.wait_for_timeout(1000)
                         
-                        # Clique 2: Tenta clicar no botão real, se não conseguir, clica no centro perfeito (640, 360)
+                        # Clique 2: Dá play
                         try:
                             if page.locator(".vjs-big-play-button").is_visible():
                                 page.click(".vjs-big-play-button", timeout=2000)
@@ -83,7 +82,6 @@ def processar_m3u():
                         except:
                             page.mouse.click(640, 360)
                             
-                        # Aguarda 5 segundos para o player iniciar e injetar o .css disfarçado
                         page.wait_for_timeout(5000)
                         
                         context.remove_listener("response", interceptar)
@@ -93,7 +91,6 @@ def processar_m3u():
                             linhas[i+1] = nova_url + "\n"
                             print(f"✨ Link capturado com sucesso: {canal_id}")
                         else:
-                            # Alternativa caso o link já esteja exposto no código fonte
                             html = page.content()
                             match = re.search(r'(https:[^"\']*?style\.css)', html, re.IGNORECASE)
                             if match:
