@@ -25,7 +25,7 @@ jobs:
         run: python verificador.py
 
       - name: Upload Debug Artifacts
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: debug-stealth-results
           path: |
