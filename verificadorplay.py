@@ -10,7 +10,9 @@ REPO_NAME = "delmirocorreia/minha-lista-iptv"
 GITHUB_TOKEN = os.getenv("MEU_TOKEN_GITHUB")
 
 def atualizar_repositorio(novo_conteudo):
-    if not novo_conteudo: return
+    if not novo_conteudo: 
+        print("⚠️ Conteúdo vazio. Atualização cancelada.")
+        return
     try:
         auth = Auth.Token(GITHUB_TOKEN)
         g = Github(auth=auth)
@@ -30,11 +32,21 @@ def processar_m3u():
     with open(ARQUIVO_M3U, "r", encoding="utf-8") as f:
         linhas = f.readlines()
 
-    novo_conteudo = ""
+    # Inicializa a variável no início para evitar o erro NameError se algo falhar
+    novo_conteudo = "".join(linhas)
 
     with sync_playwright() as p:
         browser = p.chromium.launch(headless=True, args=["--disable-blink-features=AutomationControlled"])
-        context = browser.new_context(user_agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36")
+        
+        # Definimos uma resolução de ecrã fixa de 1280x720 para os cliques serem exatos
+        context = browser.new_context(
+            user_agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
+            viewport={"width": 1280, "height": 720}
+        )
+        
+        # 🔥 TRUQUE MESTRE ANTI-POPUP: Fecha na hora qualquer aba de anúncio que o site tentar abrir
+        context.on("page", lambda popup: popup.close())
+
         page = context.new_page()
         page.add_init_script("Object.defineProperty(navigator, 'webdriver', {get: () => undefined})")
 
@@ -45,48 +57,58 @@ def processar_m3u():
                 if "embedtv" in linhas[i+1]:
                     print(f"🔄 Checando {canal_id}...")
                     
-                    # Variável para guardar a URL capturada pela rede
                     url_capturada = []
                     
-                    # Função que escuta o tráfego (igual a aba Network do navegador)
+                    # Monitoriza a rede para pescar o falso .css assim que ele surgir
                     def interceptar(response):
                         if "style.css" in response.url and "embedtv" in response.url:
                             url_capturada.append(response.url)
                     
-                    page.on("response", interceptar)
+                    context.on("response", interceptar)
 
                     try:
-                        page.goto(f"{URL_BASE}{canal_id}")
+                        page.goto(f"{URL_BASE}{canal_id}", timeout=30000)
                         page.wait_for_load_state("networkidle")
                         
-                        # O SEGREDO DO SEU VÍDEO: Clicar DUAS vezes para burlar o pop-up
-                        page.mouse.click(500, 300) # Clique 1: Absorvido pelo anúncio
-                        page.wait_for_timeout(1500)
-                        page.mouse.click(500, 300) # Clique 2: Dá play no vídeo de verdade
-                        page.wait_for_timeout(4000) # Espera 4 segundos para o vídeo rodar e o css carregar
+                        # Clique 1: Clica no corpo da página para desarmar o anúncio invisível inicial
+                        page.click("body")
+                        page.wait_for_timeout(1000)
                         
-                        # Removemos o "olheiro" da rede para não misturar com o próximo canal
-                        page.remove_listener("response", interceptar)
+                        # Clique 2: Tenta clicar no botão real, se não conseguir, clica no centro perfeito (640, 360)
+                        try:
+                            if page.locator(".vjs-big-play-button").is_visible():
+                                page.click(".vjs-big-play-button", timeout=2000)
+                            else:
+                                page.mouse.click(640, 360)
+                        except:
+                            page.mouse.click(640, 360)
+                            
+                        # Aguarda 5 segundos para o player iniciar e injetar o .css disfarçado
+                        page.wait_for_timeout(5000)
+                        
+                        context.remove_listener("response", interceptar)
 
-                        # Verifica se o link foi capturado na rede
                         if url_capturada:
                             nova_url = url_capturada[0]
                             linhas[i+1] = nova_url + "\n"
-                            print(f"✨ Atualizado com sucesso: {canal_id}")
+                            print(f"✨ Link capturado com sucesso: {canal_id}")
                         else:
-                            # Fallback de segurança: busca no HTML caso a rede falhe
+                            # Alternativa caso o link já esteja exposto no código fonte
                             html = page.content()
                             match = re.search(r'(https:[^"\']*?style\.css)', html, re.IGNORECASE)
                             if match:
                                 linhas[i+1] = match.group(1) + "\n"
-                                print(f"✨ Atualizado (via HTML): {canal_id}")
+                                print(f"✨ Link capturado (via HTML): {canal_id}")
                             else:
-                                print(f"⚠️ Link não encontrado para {canal_id}")
+                                print(f"⚠️ Link disfarçado não gerado para {canal_id}")
                                 page.screenshot(path=f"debug_{canal_id}.png")
                     
                     except Exception as e:
                         print(f"Erro em {canal_id}: {e}")
-                        page.remove_listener("response", interceptar) # Limpa em caso de erro
+                        try:
+                            context.remove_listener("response", interceptar)
+                        except:
+                            pass
         
         browser.close()
         novo_conteudo = "".join(linhas)
