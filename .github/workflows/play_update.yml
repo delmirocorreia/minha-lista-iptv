@@ -19,7 +19,7 @@ jobs:
 
       - name: Instalar Playwright e Dependências
         run: |
-          pip install playwright PyGithub
+          pip install playwright PyGithub playwright-stealth
           playwright install chromium
           playwright install-deps
 
