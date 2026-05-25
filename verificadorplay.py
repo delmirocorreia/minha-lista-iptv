@@ -9,22 +9,6 @@ URL_BASE = "https://ww2.embedtv.lat/"
 REPO_NAME = "delmirocorreia/minha-lista-iptv"
 GITHUB_TOKEN = os.getenv("MEU_TOKEN_GITHUB")
 
-def atualizar_repositorio(novo_conteudo):
-    try:
-        auth = Auth.Token(GITHUB_TOKEN)
-        g = Github(auth=auth)
-        repo = g.get_repo(REPO_NAME)
-        conteudo_arquivo = repo.get_contents(ARQUIVO_M3U)
-        repo.update_file(
-            path=conteudo_arquivo.path,
-            message="Automação: Atualizando lista de canais",
-            content=novo_conteudo,
-            sha=conteudo_arquivo.sha
-        )
-        print("🚀 Repositório atualizado com sucesso!")
-    except Exception as e:
-        print(f"Erro ao atualizar GitHub: {e}")
-
 def processar_m3u():
     with open(ARQUIVO_M3U, "r", encoding="utf-8") as f:
         linhas = f.readlines()
@@ -32,8 +16,6 @@ def processar_m3u():
     with sync_playwright() as p:
         browser = p.chromium.launch(headless=True)
         page = browser.new_page()
-        
-        # Simula um navegador real
         page.set_extra_http_headers({"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"})
 
         for i in range(len(linhas)):
@@ -45,7 +27,7 @@ def processar_m3u():
                     print(f"🔄 Checando {canal_id}...")
                     try:
                         page.goto(f"{URL_BASE}{canal_id}")
-                        page.wait_for_timeout(5000) # Espera 5 segundos
+                        page.wait_for_load_state("networkidle")
                         
                         html = page.content()
                         match = re.search(r'(https:[^"\']*?style\.css)', html, re.IGNORECASE)
@@ -56,19 +38,19 @@ def processar_m3u():
                                 print(f"✨ Atualizado: {canal_id}")
                                 linhas[i+1] = url_nova + "\n"
                             else:
-                                # Opcional: imprimir que está ok para ter feedback
                                 print(f"✅ {canal_id} está ok.")
                         else:
                             print(f"⚠️ Link não encontrado para {canal_id}")
-                            page.screenshot(path=f"debug_{canal_id}.png")                           
-         
+                            page.screenshot(path=f"debug_{canal_id}.png")
+                    except Exception as e:
+                        print(f"Erro ao processar {canal_id}: {e}")
+        
         browser.close()
     
+    # Estas linhas abaixo estão FORA do 'with sync_playwright', 
+    # por isso devem estar alinhadas com o 'with' (4 espaços)
     novo_conteudo = "".join(linhas)
     with open(ARQUIVO_M3U, "w", encoding="utf-8") as f:
         f.write(novo_conteudo)
     
     atualizar_repositorio(novo_conteudo)
-
-if __name__ == "__main__":
-    processar_m3u()
