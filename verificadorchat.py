@@ -3,91 +3,327 @@ import os
 from playwright.sync_api import sync_playwright
 from github import Github, Auth
 
-# --- CONFIGURAÇÕES ---
+# =========================
+# CONFIGURAÇÕES
+# =========================
+
 ARQUIVO_M3U = "index.m3u"
 URL_BASE = "https://ww2.embedtv.lat/"
 REPO_NAME = "delmirocorreia/minha-lista-iptv"
 GITHUB_TOKEN = os.getenv("MEU_TOKEN_GITHUB")
 
+
+# =========================
+# GITHUB
+# =========================
+
 def atualizar_repositorio(novo_conteudo):
+
     auth = Auth.Token(GITHUB_TOKEN)
+
     g = Github(auth=auth)
+
     repo = g.get_repo(REPO_NAME)
+
     conteudo = repo.get_contents(ARQUIVO_M3U)
-    repo.update_file(conteudo.path, "Automação: Atualizando links", novo_conteudo, conteudo.sha)
+
+    repo.update_file(
+        conteudo.path,
+        "Automação: Atualizando links",
+        novo_conteudo,
+        conteudo.sha
+    )
+
+
+# =========================
+# PROCESSAMENTO
+# =========================
 
 def processar_m3u():
+
     with open(ARQUIVO_M3U, "r", encoding="utf-8") as f:
         linhas = f.readlines()
 
     links_capturados = {}
 
     with sync_playwright() as p:
+
         browser = p.chromium.launch(
             headless=True,
-            args=["--no-sandbox", "--disable-dev-shm-usage"]
+            args=[
+                "--no-sandbox",
+                "--disable-dev-shm-usage",
+                "--autoplay-policy=no-user-gesture-required",
+                "--disable-blink-features=AutomationControlled",
+                "--mute-audio"
+            ]
         )
 
+        # =========================
+        # LOOP DOS CANAIS
+        # =========================
+
         for i in range(len(linhas)):
-            if '#EXTINF' in linhas[i] and 'tvg-id="' in linhas[i]:
-                match = re.search(r'tvg-id="([^"]+)"', linhas[i])
-                if not match: continue
-                
-                canal_id = match.group(1)
-                print(f"🔄 Processando: {canal_id}")
 
-                # Cria um contexto novo para cada canal (limpa cookies/cache)
-                context = browser.new_context(
-                    user_agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Safari/537.36"
+            if '#EXTINF' not in linhas[i]:
+                continue
+
+            if 'tvg-id="' not in linhas[i]:
+                continue
+
+            match = re.search(
+                r'tvg-id="([^"]+)"',
+                linhas[i]
+            )
+
+            if not match:
+                continue
+
+            canal_id = match.group(1)
+
+            print("\n===================================")
+            print(f"🔄 PROCESSANDO: {canal_id}")
+            print("===================================\n")
+
+            # =========================
+            # CONTEXTO LIMPO
+            # =========================
+
+            context = browser.new_context(
+                user_agent=(
+                    "Mozilla/5.0 "
+                    "(Windows NT 10.0; Win64; x64) "
+                    "AppleWebKit/537.36 "
+                    "(KHTML, like Gecko) "
+                    "Chrome/136.0.0.0 "
+                    "Safari/537.36"
+                ),
+                viewport={
+                    "width": 1366,
+                    "height": 768
+                }
+            )
+
+            # =========================
+            # BLOQUEADOR DE ADS
+            # =========================
+
+            context.route(
+                "**/*",
+                lambda route: (
+                    route.abort()
+                    if any(ad in route.request.url for ad in [
+                        "doubleclick",
+                        "googlesyndication",
+                        "spin83qr",
+                        "profferstrack",
+                        "ultraplusadblocker",
+                        "adexchangerapid",
+                        "acscdn"
+                    ])
+                    else route.continue_()
                 )
-                page = context.new_page()
-                
-                # Variável para armazenar o link deste canal
-                url_encontrada = None
+            )
 
-                def handle_response(response):
-                    nonlocal url_encontrada
-                    if "style.css" in response.url:
-                        url_encontrada = response.url
+            # =========================
+            # FECHA POPUPS
+            # =========================
 
-                page.on("response", handle_response)
+            context.on(
+                "page",
+                lambda p: (
+                    print("❌ Popup bloqueado"),
+                    p.close()
+                )
+            )
 
-                try:
-                    page.goto(f"{URL_BASE}{canal_id}", wait_until="networkidle", timeout=60000)
-                    page.wait_for_timeout(5000) # Tempo extra para carregar recursos dinâmicos
-                    
+            page = context.new_page()
+
+            url_encontrada = None
+
+            # =========================
+            # DEBUG REQUESTS
+            # =========================
+
+            def handle_request(request):
+                print(f"➡ REQUEST: {request.url}")
+
+            context.on("request", handle_request)
+
+            # =========================
+            # CAPTURA RESPONSE
+            # =========================
+
+            def handle_response(response):
+
+                nonlocal url_encontrada
+
+                url = response.url
+
+                print(f"⬅ RESPONSE: {url}")
+
+                # =========================
+                # FILTRO PRINCIPAL
+                # =========================
+
+                if "style.css" in url:
+
+                    if not url_encontrada:
+
+                        url_encontrada = url
+
+                        print("\n✅ STYLE.CSS CAPTURADO")
+                        print(f"📺 Canal: {canal_id}")
+                        print(f"🔗 URL: {url}\n")
+
+            context.on("response", handle_response)
+
+            # =========================
+            # PROCESSA CANAL
+            # =========================
+
+            try:
+
+                url_canal = f"{URL_BASE}{canal_id}"
+
+                page.goto(
+                    url_canal,
+                    wait_until="networkidle",
+                    timeout=60000
+                )
+
+                print("✅ Página carregada")
+
+                # =========================
+                # SCREENSHOT DEBUG
+                # =========================
+
+                page.screenshot(
+                    path=f"debug_{canal_id}.png"
+                )
+
+                # =========================
+                # HTML DEBUG
+                # =========================
+
+                with open(
+                    f"debug_{canal_id}.html",
+                    "w",
+                    encoding="utf-8"
+                ) as f:
+                    f.write(page.content())
+
+                # =========================
+                # IFRAMES
+                # =========================
+
+                print("\n🖼 IFRAMES:")
+
+                for frame in page.frames:
+                    print(frame.url)
+
+                print()
+
+                # =========================
+                # ESPERA
+                # =========================
+
+                page.wait_for_timeout(5000)
+
+                # =========================
+                # MÚLTIPLOS CLIQUES
+                # =========================
+
+                for tentativa in range(3):
+
+                    print(
+                        f"▶ Tentativa de clique "
+                        f"{tentativa + 1}"
+                    )
+
+                    try:
+
+                        page.mouse.click(500, 300)
+
+                    except Exception as e:
+
+                        print("❌ Erro no clique:", e)
+
+                    page.wait_for_timeout(4000)
+
                     if url_encontrada:
-                        links_capturados[canal_id] = url_encontrada
-                        print(f"✅ Sucesso: {url_encontrada}")
-                    else:
-                        print(f"⚠️ CSS não encontrado para {canal_id}")
-                
-                except Exception as e:
-                    print(f"Erro ao processar {canal_id}: {e}")
+                        break
+
+                # =========================
+                # RESULTADO
+                # =========================
+
+                if url_encontrada:
+
+                    links_capturados[canal_id] = url_encontrada
+
+                    print(f"✅ SUCESSO: {url_encontrada}")
+
+                else:
+
+                    print(
+                        f"⚠ style.css não encontrado "
+                        f"para {canal_id}"
+                    )
+
+            except Exception as e:
+
+                print(f"❌ ERRO EM {canal_id}")
+                print(str(e))
+
+            finally:
 
                 page.close()
                 context.close()
 
         browser.close()
 
-    # Atualiza a lista na memória
-    novo_conteudo_lista = []
-    for linha in linhas:
-        novo_conteudo_lista.append(linha)
-        if '#EXTINF' in linha and 'tvg-id="' in linha:
-            match = re.search(r'tvg-id="([^"]+)"', linha)
-            if match:
-                canal_id = match.group(1)
-                if canal_id in links_capturados:
-                    # Substitui a linha seguinte (a URL) pelo link novo
-                    # Removemos a linha original e colocamos a nova
-                    novo_conteudo_lista.pop() 
-                    novo_conteudo_lista.append(linha)
-                    novo_conteudo_lista.append(links_capturados[canal_id] + "\n")
+    # =========================
+    # ATUALIZA M3U
+    # =========================
 
-    # Envia para o GitHub
-    atualizar_repositorio("".join(novo_conteudo_lista))
-    print("\n🚀 Fim do processo. Repositório atualizado.")
+    for i in range(len(linhas)):
+
+        if '#EXTINF' not in linhas[i]:
+            continue
+
+        match = re.search(
+            r'tvg-id="([^"]+)"',
+            linhas[i]
+        )
+
+        if not match:
+            continue
+
+        canal_id = match.group(1)
+
+        if canal_id in links_capturados:
+
+            linhas[i + 1] = (
+                links_capturados[canal_id] + "\n"
+            )
+
+            print(f"✅ Atualizado: {canal_id}")
+
+    # =========================
+    # ENVIA PARA GITHUB
+    # =========================
+
+    novo_conteudo = "".join(linhas)
+
+    atualizar_repositorio(novo_conteudo)
+
+    print("\n🚀 PROCESSO FINALIZADO")
+
+
+# =========================
+# START
+# =========================
 
 if __name__ == "__main__":
     processar_m3u()
