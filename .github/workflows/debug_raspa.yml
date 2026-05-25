@@ -1,8 +1,6 @@
-name: HTML RASPAGEM
+name: Teste de Stealth
 
 on:
-  schedule:
-    - cron: '0 * * * *'
   workflow_dispatch:
 
 jobs:
@@ -10,26 +8,29 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout do código
-        uses: actions/checkout@v4
+        uses: actions/checkout@v3
 
       - name: Instalar Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v4
         with:
           python-version: '3.9'
 
-      - name: Instalar Playwright e Dependências
+      - name: Instalar Dependências
         run: |
-          pip install playwright PyGithub
+          pip install playwright playwright-stealth PyGithub
           playwright install chromium
           playwright install-deps
 
-      - name: Rodar script
-        env:
-          MEU_TOKEN_GITHUB: ${{ secrets.MEU_TOKEN_GITHUB }}
+      - name: Rodar script de teste
         run: python espelho_raspa.py
 
       - name: Upload Debug Artifacts
-        if: always() # Garante o upload mesmo que o script falhe
+        uses: actions/upload-artifact@v3
+        with:
+          name: debug-stealth-results
+          path: |
+            debug_espelho.txt
+            debug_visual.png
         uses: actions/upload-artifact@v4
         with:
           name: debug-results
