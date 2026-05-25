@@ -8,13 +8,16 @@ from github import Github, Auth
 # =========================
 
 ARQUIVO_M3U = "index.m3u"
+
 URL_BASE = "https://ww2.embedtv.lat/"
+
 REPO_NAME = "delmirocorreia/minha-lista-iptv"
+
 GITHUB_TOKEN = os.getenv("MEU_TOKEN_GITHUB")
 
 
 # =========================
-# ATUALIZA REPOSITÓRIO
+# GITHUB
 # =========================
 
 def atualizar_repositorio(novo_conteudo):
@@ -36,12 +39,17 @@ def atualizar_repositorio(novo_conteudo):
 
 
 # =========================
-# PROCESSAMENTO PRINCIPAL
+# PROCESSAMENTO
 # =========================
 
 def processar_m3u():
 
-    with open(ARQUIVO_M3U, "r", encoding="utf-8") as f:
+    with open(
+        ARQUIVO_M3U,
+        "r",
+        encoding="utf-8"
+    ) as f:
+
         linhas = f.readlines()
 
     links_capturados = {}
@@ -105,7 +113,7 @@ def processar_m3u():
             )
 
             # =========================
-            # BLOQUEIO DE ADS
+            # BLOQUEADOR DE ADS
             # =========================
 
             def bloquear_ads(route):
@@ -136,20 +144,47 @@ def processar_m3u():
 
             page = context.new_page()
 
+            # =========================
+            # URL FINAL
+            # =========================
+
             url_encontrada = None
 
             # =========================
-            # DEBUG REQUESTS
+            # REQUESTS
             # =========================
 
             def handle_request(request):
 
-                print(f"➡ REQUEST: {request.url}")
+                nonlocal url_encontrada
 
-            context.on("request", handle_request)
+                url = request.url
+
+                print(f"➡ REQUEST: {url}")
+
+                # =========================
+                # STYLE.CSS REAL
+                # =========================
+
+                if (
+                    "cloudflaire.lat" in url
+                    and "style.css" in url
+                ):
+
+                    if not url_encontrada:
+
+                        url_encontrada = url
+
+                        print("\n🔥 STYLE REAL ENCONTRADO (REQUEST)")
+                        print(url)
+
+            context.on(
+                "request",
+                handle_request
+            )
 
             # =========================
-            # CAPTURA RESPONSES
+            # RESPONSES
             # =========================
 
             def handle_response(response):
@@ -161,28 +196,35 @@ def processar_m3u():
                 print(f"⬅ RESPONSE: {url}")
 
                 # =========================
-                # FILTRO PRINCIPAL
+                # STYLE.CSS REAL
                 # =========================
 
-                if "style.css" in url:
+                if (
+                    "cloudflaire.lat" in url
+                    and "style.css" in url
+                ):
 
                     if not url_encontrada:
 
                         url_encontrada = url
 
-                        print("\n✅ STYLE.CSS CAPTURADO")
-                        print(f"📺 Canal: {canal_id}")
-                        print(f"🔗 URL: {url}\n")
+                        print("\n🔥 STYLE REAL ENCONTRADO (RESPONSE)")
+                        print(url)
 
-            context.on("response", handle_response)
+            context.on(
+                "response",
+                handle_response
+            )
 
             # =========================
-            # PROCESSA CANAL
+            # PROCESSAMENTO
             # =========================
 
             try:
 
-                url_canal = f"{URL_BASE}{canal_id}"
+                url_canal = (
+                    f"{URL_BASE}{canal_id}"
+                )
 
                 page.goto(
                     url_canal,
@@ -193,7 +235,7 @@ def processar_m3u():
                 print("✅ Página carregada")
 
                 # =========================
-                # SCREENSHOT DEBUG
+                # SCREENSHOT
                 # =========================
 
                 page.screenshot(
@@ -201,7 +243,7 @@ def processar_m3u():
                 )
 
                 # =========================
-                # HTML DEBUG
+                # HTML
                 # =========================
 
                 with open(
@@ -209,6 +251,7 @@ def processar_m3u():
                     "w",
                     encoding="utf-8"
                 ) as f:
+
                     f.write(page.content())
 
                 # =========================
@@ -230,27 +273,43 @@ def processar_m3u():
                 page.wait_for_timeout(5000)
 
                 # =========================
-                # MÚLTIPLOS CLIQUES
+                # CLIQUES
                 # =========================
 
                 for tentativa in range(5):
 
                     print(
-                        f"▶ Tentativa de clique "
+                        f"\n▶ Tentativa "
                         f"{tentativa + 1}"
                     )
 
                     try:
 
-                        page.mouse.click(500, 300)
+                        # Clique REAL DOM
+                        page.click(
+                            "body",
+                            timeout=5000
+                        )
 
                     except Exception as e:
 
-                        print("❌ Erro no clique:", e)
+                        print(
+                            "❌ Erro clique:",
+                            e
+                        )
 
-                    page.wait_for_timeout(4000)
+                    # =========================
+                    # ESPERA LONGA
+                    # =========================
+
+                    page.wait_for_timeout(15000)
+
+                    # =========================
+                    # SE ENCONTROU
+                    # =========================
 
                     if url_encontrada:
+
                         break
 
                 # =========================
@@ -259,20 +318,30 @@ def processar_m3u():
 
                 if url_encontrada:
 
-                    links_capturados[canal_id] = url_encontrada
+                    links_capturados[
+                        canal_id
+                    ] = url_encontrada
 
-                    print(f"✅ SUCESSO: {url_encontrada}")
+                    print(
+                        "\n✅ STYLE.CSS "
+                        "CAPTURADO"
+                    )
+
+                    print(url_encontrada)
 
                 else:
 
                     print(
-                        f"⚠ style.css não encontrado "
-                        f"para {canal_id}"
+                        "\n⚠ STYLE.CSS "
+                        "NÃO ENCONTRADO"
                     )
 
             except Exception as e:
 
-                print(f"❌ ERRO EM {canal_id}")
+                print(
+                    f"\n❌ ERRO EM "
+                    f"{canal_id}"
+                )
 
                 print(str(e))
 
@@ -306,20 +375,28 @@ def processar_m3u():
         if canal_id in links_capturados:
 
             linhas[i + 1] = (
-                links_capturados[canal_id] + "\n"
+                links_capturados[canal_id]
+                + "\n"
             )
 
-            print(f"✅ Atualizado: {canal_id}")
+            print(
+                f"✅ Atualizado: "
+                f"{canal_id}"
+            )
 
     # =========================
-    # ENVIA PARA GITHUB
+    # ENVIA GITHUB
     # =========================
 
     novo_conteudo = "".join(linhas)
 
-    atualizar_repositorio(novo_conteudo)
+    atualizar_repositorio(
+        novo_conteudo
+    )
 
-    print("\n🚀 PROCESSO FINALIZADO")
+    print(
+        "\n🚀 PROCESSO FINALIZADO"
+    )
 
 
 # =========================
@@ -327,4 +404,5 @@ def processar_m3u():
 # =========================
 
 if __name__ == "__main__":
+
     processar_m3u()
