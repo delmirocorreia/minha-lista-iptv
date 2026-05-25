@@ -26,7 +26,7 @@ jobs:
       - name: Rodar script
         env:
           MEU_TOKEN_GITHUB: ${{ secrets.MEU_TOKEN_GITHUB }}
-        run: python debug_raspa.py
+        run: python espelho_raspa.py
 
       - name: Upload Debug Artifacts
         if: always() # Garante o upload mesmo que o script falhe
