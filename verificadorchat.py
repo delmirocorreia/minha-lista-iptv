@@ -14,7 +14,7 @@ GITHUB_TOKEN = os.getenv("MEU_TOKEN_GITHUB")
 
 
 # =========================
-# GITHUB
+# ATUALIZA REPOSITÓRIO
 # =========================
 
 def atualizar_repositorio(novo_conteudo):
@@ -36,7 +36,7 @@ def atualizar_repositorio(novo_conteudo):
 
 
 # =========================
-# PROCESSAMENTO
+# PROCESSAMENTO PRINCIPAL
 # =========================
 
 def processar_m3u():
@@ -105,37 +105,34 @@ def processar_m3u():
             )
 
             # =========================
-            # BLOQUEADOR DE ADS
+            # BLOQUEIO DE ADS
             # =========================
 
-            context.route(
-                "**/*",
-                lambda route: (
+            def bloquear_ads(route):
+
+                url = route.request.url
+
+                ads = [
+                    "doubleclick",
+                    "googlesyndication",
+                    "spin83qr",
+                    "profferstrack",
+                    "ultraplusadblocker",
+                    "adexchangerapid",
+                    "acscdn"
+                ]
+
+                if any(ad in url for ad in ads):
+
+                    print(f"🚫 BLOQUEADO: {url}")
+
                     route.abort()
-                    if any(ad in route.request.url for ad in [
-                        "doubleclick",
-                        "googlesyndication",
-                        "spin83qr",
-                        "profferstrack",
-                        "ultraplusadblocker",
-                        "adexchangerapid",
-                        "acscdn"
-                    ])
-                    else route.continue_()
-                )
-            )
 
-            # =========================
-            # FECHA POPUPS
-            # =========================
+                else:
 
-            context.on(
-                "page",
-                lambda p: (
-                    print("❌ Popup bloqueado"),
-                    p.close()
-                )
-            )
+                    route.continue_()
+
+            context.route("**/*", bloquear_ads)
 
             page = context.new_page()
 
@@ -146,12 +143,13 @@ def processar_m3u():
             # =========================
 
             def handle_request(request):
+
                 print(f"➡ REQUEST: {request.url}")
 
             context.on("request", handle_request)
 
             # =========================
-            # CAPTURA RESPONSE
+            # CAPTURA RESPONSES
             # =========================
 
             def handle_response(response):
@@ -220,12 +218,13 @@ def processar_m3u():
                 print("\n🖼 IFRAMES:")
 
                 for frame in page.frames:
+
                     print(frame.url)
 
                 print()
 
                 # =========================
-                # ESPERA
+                # ESPERA INICIAL
                 # =========================
 
                 page.wait_for_timeout(5000)
@@ -234,7 +233,7 @@ def processar_m3u():
                 # MÚLTIPLOS CLIQUES
                 # =========================
 
-                for tentativa in range(3):
+                for tentativa in range(5):
 
                     print(
                         f"▶ Tentativa de clique "
@@ -274,11 +273,13 @@ def processar_m3u():
             except Exception as e:
 
                 print(f"❌ ERRO EM {canal_id}")
+
                 print(str(e))
 
             finally:
 
                 page.close()
+
                 context.close()
 
         browser.close()
