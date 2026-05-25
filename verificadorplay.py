@@ -1,7 +1,7 @@
 import re
 import os
+import playwright_stealth
 from playwright.sync_api import sync_playwright
-from playwright_stealth import stealth
 from github import Github, Auth
 
 # --- CONFIGURAÇÕES ---
@@ -34,8 +34,8 @@ def processar_m3u():
         browser = p.chromium.launch(headless=True)
         page = browser.new_page()
         
-        # Aplica a camuflagem para evitar detecção de bot
-        stealth(page)
+        # Chamada corrigida para evitar erro de callable
+        playwright_stealth.stealth(page)
         
         page.set_extra_http_headers({"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"})
 
