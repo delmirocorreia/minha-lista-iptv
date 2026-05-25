@@ -1,7 +1,7 @@
 import re
 import os
 from playwright.sync_api import sync_playwright
-from playwright_stealth import stealth # --- NOVO: Import da camuflagem ---
+from playwright_stealth import stealth
 from github import Github, Auth
 
 # --- CONFIGURAÇÕES ---
@@ -32,10 +32,10 @@ def processar_m3u():
 
     with sync_playwright() as p:
         browser = p.chromium.launch(headless=True)
-        stealth(page)
+        page = browser.new_page()
         
-        # --- NOVO: Aplica a camuflagem anti-bot ---
-        stealth_sync(page) 
+        # Aplica a camuflagem para evitar detecção de bot
+        stealth(page)
         
         page.set_extra_http_headers({"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"})
 
@@ -50,15 +50,12 @@ def processar_m3u():
                         page.goto(f"{URL_BASE}{canal_id}")
                         page.wait_for_load_state("networkidle")
                         
-                        # --- NOVO: Tenta clicar no botão de Play se ele existir ---
+                        # Tenta forçar o clique no botão de player
                         try:
-                            # Procura pelo elemento que contém o Play (baseado nas imagens)
-                            # O seletor '.vjs-big-play-button' é o padrão do Video.js, que o site parece usar
                             page.click('.vjs-big-play-button', timeout=3000)
                             print(f"   🖱️ Clique de Play forçado em {canal_id}")
-                            page.wait_for_timeout(2000) # Espera o player carregar
+                            page.wait_for_timeout(2000)
                         except:
-                            # Se não encontrar o botão, apenas continua
                             pass
 
                         html = page.content()
