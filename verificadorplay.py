@@ -55,10 +55,15 @@ def processar_m3u():
                             if url_nova != url_antiga:
                                 print(f"✨ Atualizado: {canal_id}")
                                 linhas[i+1] = url_nova + "\n"
+                            else:
+                                # Opcional: imprimir que está ok para ter feedback
+                                print(f"✅ {canal_id} está ok.")
                         else:
-                            page.screenshot(path=f"debug_{canal_id}.png")
-                    except Exception as e:
-                        print(f"Erro ao processar {canal_id}: {e}")
+                            print(f"⚠️ Link não encontrado para {canal_id}")
+                            page.screenshot(path=f"debug_{canal_id}.png")                           
+                            
+                  #  except Exception as e:
+                  #      print(f"Erro ao processar {canal_id}: {e}")
 
         browser.close()
     
