@@ -27,3 +27,10 @@ jobs:
         env:
           MEU_TOKEN_GITHUB: ${{ secrets.MEU_TOKEN_GITHUB }}
         run: python verificadorplay.py
+
+      - name: Salvar screenshots em caso de erro
+        if: always()  # Isso garante que ele tente salvar mesmo se o script falhar
+        uses: actions/upload-artifact@v4
+        with:
+          name: debug-screenshots
+          path: "*.png"
