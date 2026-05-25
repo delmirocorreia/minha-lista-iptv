@@ -1,7 +1,7 @@
 import re
 import os
 from playwright.sync_api import sync_playwright
-from playwright_stealth import stealth_sync # --- NOVO: Import da camuflagem ---
+from playwright_stealth import stealth # --- NOVO: Import da camuflagem ---
 from github import Github, Auth
 
 # --- CONFIGURAÇÕES ---
@@ -32,7 +32,7 @@ def processar_m3u():
 
     with sync_playwright() as p:
         browser = p.chromium.launch(headless=True)
-        page = browser.new_page()
+        stealth(page)
         
         # --- NOVO: Aplica a camuflagem anti-bot ---
         stealth_sync(page) 
