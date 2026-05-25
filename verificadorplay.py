@@ -42,10 +42,9 @@ def processar_m3u():
             viewport={"width": 1280, "height": 720}
         )
         
-        # Criamos a página principal primeiro
         page = context.new_page()
         
-        # O destruidor de anúncios agora atua SÓ na página principal
+        # Bloqueador de pop-ups chatinhos da aba principal
         page.on("popup", lambda popup: popup.close())
         
         page.add_init_script("Object.defineProperty(navigator, 'webdriver', {get: () => undefined})")
@@ -59,43 +58,43 @@ def processar_m3u():
                     
                     url_capturada = []
                     
+                    # NOVA REGRA: Pega qualquer m3u8 ou css disfarçado, independente do domínio!
                     def interceptar(response):
-                        if "style.css" in response.url and "embedtv" in response.url:
-                            url_capturada.append(response.url)
+                        url = response.url
+                        tipo = response.request.resource_type
+                        
+                        # Se for .m3u8 direto OU um style.css carregado pelo player (xhr/fetch)
+                        if ".m3u8" in url or ("style.css" in url and tipo in ["xhr", "fetch"]):
+                            url_capturada.append(url)
                     
                     context.on("response", interceptar)
 
                     try:
-                        page.goto(f"{URL_BASE}{canal_id}", timeout=30000)
+                        page.goto(f"{URL_BASE}{canal_id}", timeout=40000)
                         page.wait_for_load_state("networkidle")
                         
-                        # Clique 1: Desarmar anúncio invisível
-                        page.click("body")
-                        page.wait_for_timeout(1000)
-                        
-                        # Clique 2: Dá play
-                        try:
-                            if page.locator(".vjs-big-play-button").is_visible():
-                                page.click(".vjs-big-play-button", timeout=2000)
-                            else:
-                                page.mouse.click(640, 360)
-                        except:
+                        # Clica múltiplas vezes no centro para furar qualquer barreira de anúncios
+                        for _ in range(3):
                             page.mouse.click(640, 360)
+                            page.wait_for_timeout(1000)
                             
-                        page.wait_for_timeout(5000)
+                        # Espera 6 segundos para dar tempo do player iniciar e puxar o vídeo da rede
+                        page.wait_for_timeout(6000)
                         
                         context.remove_listener("response", interceptar)
 
                         if url_capturada:
-                            nova_url = url_capturada[0]
+                            # Pega o último link capturado (geralmente é o definitivo do vídeo)
+                            nova_url = url_capturada[-1]
                             linhas[i+1] = nova_url + "\n"
-                            print(f"✨ Link capturado com sucesso: {canal_id}")
+                            print(f"✨ Link capturado via REDE com sucesso: {canal_id}")
                         else:
+                            # Fallback buscando no HTML
                             html = page.content()
-                            match = re.search(r'(https:[^"\']*?style\.css)', html, re.IGNORECASE)
+                            match = re.search(r'(https?://[^\s"\'<>]+?(?:style\.css|\.m3u8))', html, re.IGNORECASE)
                             if match:
                                 linhas[i+1] = match.group(1) + "\n"
-                                print(f"✨ Link capturado (via HTML): {canal_id}")
+                                print(f"✨ Link capturado via HTML: {canal_id}")
                             else:
                                 print(f"⚠️ Link disfarçado não gerado para {canal_id}")
                                 page.screenshot(path=f"debug_{canal_id}.png")
