@@ -1,7 +1,9 @@
-name: Teste de Stealth
+name: Roda Automação com Proxy
 
 on:
-  workflow_dispatch:
+  workflow_dispatch:  # Permite rodar manualmente na aba Actions
+  schedule:
+    - cron: '0 12 * * *' # Roda automaticamente todo dia às 12:00
 
 jobs:
   build:
@@ -17,17 +19,18 @@ jobs:
 
       - name: Instalar Dependências
         run: |
-          pip install playwright playwright-stealth PyGithub
+          # Instalamos requests para buscar proxies e playwright para a automação
+          pip install playwright requests PyGithub
           playwright install chromium
           playwright install-deps
 
-      - name: Rodar script de teste
-        run: python espelho_raspa.py
+      - name: Rodar script de captura
+        run: python proxy.py
 
       - name: Upload Debug Artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: debug-stealth-results
+          name: debug-proxy-results
           path: |
-            debug_espelho.txt
+            debug_proxy_final.txt
             debug_visual.png
