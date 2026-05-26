@@ -22,7 +22,7 @@ jobs:
         with:
           authkey: ${{ secrets.TAILSCALE_AUTHKEY }}
           # IMPORTANTE: Troque 'SEU-PC-NAME' pelo nome exato do seu computador no painel do Tailscale
-          args: --exit-node=SEU-PC-NAME
+          args: --exit-node=ryzen
 
       - name: Instalar Dependências
         run: |
