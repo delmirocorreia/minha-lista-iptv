@@ -1,7 +1,9 @@
-name: Roda com Tailscale
+name: Roda com Tailscale (Exit Node)
 
 on:
   workflow_dispatch:
+  schedule:
+    - cron: '0 12 * * *' # Roda automaticamente todos os dias às 12:00
 
 jobs:
   build:
@@ -19,10 +21,12 @@ jobs:
         uses: tailscale/github-action@v2
         with:
           authkey: ${{ secrets.TAILSCALE_AUTHKEY }}
+          # IMPORTANTE: Troque 'SEU-PC-NAME' pelo nome exato do seu computador no painel do Tailscale
+          args: --exit-node=SEU-PC-NAME
 
       - name: Instalar Dependências
         run: |
-          pip install playwright PyGithub
+          pip install playwright
           playwright install chromium
           playwright install-deps
 
