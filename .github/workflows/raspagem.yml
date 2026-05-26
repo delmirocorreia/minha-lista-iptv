@@ -1,4 +1,4 @@
-name: Executar Raspagem2
+name: Roda com Tailscale
 
 on:
   workflow_dispatch:
@@ -6,27 +6,33 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
-      
     steps:
       - name: Checkout do código
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
-      - name: Configurar Python
-        uses: actions/setup-python@v4
+      - name: Instalar Python
+        uses: actions/setup-python@v5
         with:
           python-version: '3.9'
 
-      - name: Instalar dependências
-        run: |
-          pip install --upgrade pip
-          # Forçamos a instalação das dependências problemáticas primeiro
-          pip install blinker==1.7.0
-          pip install selenium-wire undetected-chromedriver selenium requests PyGithub
-          pip uninstall -y chromedriver-autoinstaller
+      - name: Conectar ao Tailscale
+        uses: tailscale/github-action@v2
+        with:
+          authkey: ${{ secrets.TAILSCALE_AUTHKEY }}
 
-      - name: Rodar script de raspagem
-        env:
-          MEU_TOKEN_GITHUB: ${{ secrets.MEU_TOKEN_GITHUB }}
-        run: python espelho_raspa_rede.py
+      - name: Instalar Dependências
+        run: |
+          pip install playwright PyGithub
+          playwright install chromium
+          playwright install-deps
+
+      - name: Rodar script
+        run: python espelho_raspa.py
+
+      - name: Upload Debug
+        uses: actions/upload-artifact@v4
+        with:
+          name: debug-tailscale-results
+          path: |
+            debug_espelho.txt
+            debug_visual.png
