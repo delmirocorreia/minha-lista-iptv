@@ -1,121 +1,121 @@
 #EXTM3U
 #EXTINF:-1 tvg-id="discoverychannel" tvg-logo="https://github.com/tv-logo/tv-logos/blob/main/countries/united-states/discovery-channel-icon-3-us.png?raw=true",Discovery Channel
-https://d3fad7d3634dbfb61018813546edbccb.cloudflaire.lat/assets/themes/embedtv_858565ec971a769db9850911cc909a94/style.css
+https://825f9cd5f0390bc77c1fed3c94885c87.cloudflaire.lat/assets/themes/embedtv_8f17cb76650d0656438853c22e61aeb2/style.css
 #EXTINF:-1 tvg-id="animalplanet" tvg-logo="https://github.com/tv-logo/tv-logos/blob/main/countries/united-states/animal-planet-us.png?raw=true",Animal Planet
-https://d3fad7d3634dbfb61018813546edbccb.cloudflaire.lat/assets/themes/embedtv_4688aa885b8241f61f222dc8a8c493f5/style.css
+https://825f9cd5f0390bc77c1fed3c94885c87.cloudflaire.lat/assets/themes/embedtv_52b43ad5b49e5b922459f1c69278cf27/style.css
 #EXTINF:-1 tvg-id="history" tvg-logo="https://github.com/tv-logo/tv-logos/blob/main/countries/united-states/history-channel-us.png?raw=true",History
-https://d3fad7d3634dbfb61018813546edbccb.cloudflaire.lat/assets/themes/embedtv_e72badd91f8b3f2ba55f97b4941f3cdb/style.css
+https://825f9cd5f0390bc77c1fed3c94885c87.cloudflaire.lat/assets/themes/embedtv_710559ba4e7844b1fcf6c292d0509c77/style.css
 #EXTINF:-1 tvg-id="history2" tvg-logo="https://github.com/tv-logo/tv-logos/blob/main/countries/united-states/history-channel-2-us.png?raw=true",History 2
-https://d3fad7d3634dbfb61018813546edbccb.cloudflaire.lat/assets/themes/embedtv_0afdcbb574a65fc6cbee0508728e1aa4/style.css
+https://825f9cd5f0390bc77c1fed3c94885c87.cloudflaire.lat/assets/themes/embedtv_7ef367887fdef210941f56d5f8cf792e/style.css
 #EXTINF:-1 tvg-id="cartoonnetwork" tvg-logo="https://github.com/tv-logo/tv-logos/blob/main/countries/brazil/cartoon-network-br.png?raw=true",Cartoon Network
-https://d3fad7d3634dbfb61018813546edbccb.cloudflaire.lat/assets/themes/embedtv_86716ab845847edf974efca4cafb3f14/style.css
+https://825f9cd5f0390bc77c1fed3c94885c87.cloudflaire.lat/assets/themes/embedtv_d5ece67189f9456f61c0075736d7771b/style.css
 #EXTINF:-1 tvg-id="cartoonito" tvg-logo="https://github.com/tv-logo/tv-logos/blob/main/countries/brazil/cartoonito-br.png?raw=true",Cartoonito
-https://d3fad7d3634dbfb61018813546edbccb.cloudflaire.lat/assets/themes/embedtv_9669ad063f3e930f92525bf27158ce25/style.css
+https://825f9cd5f0390bc77c1fed3c94885c87.cloudflaire.lat/assets/themes/embedtv_fad931e18602d89b2ba4c8b920bb8869/style.css
 #EXTINF:-1 tvg-id="24h_dragonball" tvg-logo="https://i.pinimg.com/564x/18/2e/8b/182e8b9b3a9482ada97dbb72f936d831.jpg",24h Dragonball
-https://d3fad7d3634dbfb61018813546edbccb.cloudflaire.lat/assets/themes/embedtv_29a9465a08b25b019a7c60cb7e337263/style.css
+https://825f9cd5f0390bc77c1fed3c94885c87.cloudflaire.lat/assets/themes/embedtv_bc19267795031ae8600c85bb0645d181/style.css
 #EXTINF:-1 tvg-id="24h_simpsons" tvg-logo="https://icons.veryicon.com/png/Movie%20%26%20TV/Simpsons%20Folder/Simpsons%20Folder%2024.png",Simpsons 24h
-https://d3fad7d3634dbfb61018813546edbccb.cloudflaire.lat/assets/themes/embedtv_0f5bf45602ee462825ebb1665393045b/style.css
+https://825f9cd5f0390bc77c1fed3c94885c87.cloudflaire.lat/assets/themes/embedtv_e9c96fc39ce44b13e4bc04af5388140e/style.css
 #EXTINF:-1 tvg-id="24h_odeiachris" tvg-logo="https://www.bastidoresdatv.com.br/wp-content/uploads/2023/04/Todo-Mundo-Odeia-o-Chris-no-Multishow.jpg",Todo mundo odeia o chris 24h
-https://d3fad7d3634dbfb61018813546edbccb.cloudflaire.lat/assets/themes/embedtv_41d4a10554c5b5216bec38415f548dbb/style.css
+https://825f9cd5f0390bc77c1fed3c94885c87.cloudflaire.lat/assets/themes/embedtv_c121822484e365bc41f07db0c532697b/style.css
 #EXTINF:-1 tvg-id="discoverykids" tvg-logo="https://github.com/tv-logo/tv-logos/blob/main/countries/brazil/discovery-kids-br.png?raw=true",Discovery Kids
-https://d3fad7d3634dbfb61018813546edbccb.cloudflaire.lat/assets/themes/embedtv_6e1db4d76c995f9ef93e945ac1c739c7/style.css
+https://825f9cd5f0390bc77c1fed3c94885c87.cloudflaire.lat/assets/themes/embedtv_c1d955b5b6acc938c63309d38c6ccba4/style.css
 #EXTINF:-1 tvg-id="Nick" tvg-logo="https://github.com/tv-logo/tv-logos/blob/main/countries/italy/nickelodeon-it.png?raw=true",Nickelodeon
 https://x1co.com.br:8443/hls/stream.m3u8
 #EXTINF:-1 tvg-id="gloob" tvg-logo="https://github.com/tv-logo/tv-logos/blob/main/countries/brazil/gloob-br.png?raw=true",Gloob
-https://d3fad7d3634dbfb61018813546edbccb.cloudflaire.lat/assets/themes/embedtv_581635b41fbc5090f480eef393610f4e/style.css
+https://825f9cd5f0390bc77c1fed3c94885c87.cloudflaire.lat/assets/themes/embedtv_c331eb744cd19ccf5a515bf6a8a73d63/style.css
 #EXTINF:-1 tvg-id="telecinepremium" tvg-logo="https://logowiki.net/wp-content/uploads/imgp/Telecine-Premium-Logo-1-9853.png",Telecine Premium
-https://d3fad7d3634dbfb61018813546edbccb.cloudflaire.lat/assets/themes/embedtv_fd50b1abc2a4ddb827df841ed2aec181/style.css
+https://825f9cd5f0390bc77c1fed3c94885c87.cloudflaire.lat/assets/themes/embedtv_b11acabd2b823956fbb146b132a0fd46/style.css
 #EXTINF:-1 tvg-id="telecinepipoca" tvg-logo="https://i.pinimg.com/474x/52/ab/95/52ab95a9fad63cc4f92e0de7a0d6f00d.jpg",Telecine Pipoca
-https://d3fad7d3634dbfb61018813546edbccb.cloudflaire.lat/assets/themes/embedtv_eff149f42d6169b6b6f2ab7c37853514/style.css
+https://825f9cd5f0390bc77c1fed3c94885c87.cloudflaire.lat/assets/themes/embedtv_d185683f327d76c6ef8dd18a8b56cb94/style.css
 #EXTINF:-1 tvg-id="telecineaction" tvg-logo="https://cdn.mitvstatic.com/channels/br_telecine-action-1_m.png",Telecine Action
-https://d3fad7d3634dbfb61018813546edbccb.cloudflaire.lat/assets/themes/embedtv_7067765f5d3b1744519810ddb3d27674/style.css
+https://825f9cd5f0390bc77c1fed3c94885c87.cloudflaire.lat/assets/themes/embedtv_ee516d5402c1a98248d58434bd42b3f4/style.css
 #EXTINF:-1 tvg-id="telecinefun" tvg-logo="https://vignette.wikia.nocookie.net/tvpediabrasil/images/1/16/Telecinefun.jpg/revision/latest?cb=20140515151028&path-prefix=pt-br",Telecine Fun
-https://d3fad7d3634dbfb61018813546edbccb.cloudflaire.lat/assets/themes/embedtv_613fcf09a1f8c792ca332f285c956c96/style.css
+https://825f9cd5f0390bc77c1fed3c94885c87.cloudflaire.lat/assets/themes/embedtv_7de9f354f5f2e04ec0b326cad5132622/style.css
 #EXTINF:-1 tvg-id="telecinetouch" tvg-logo="https://upload.wikimedia.org/wikipedia/commons/4/4e/Telecine_Fun_2.png",Telecine Touch
-https://d3fad7d3634dbfb61018813546edbccb.cloudflaire.lat/assets/themes/embedtv_c5fddd48fe589707b5d7699d49d6533a/style.css
+https://825f9cd5f0390bc77c1fed3c94885c87.cloudflaire.lat/assets/themes/embedtv_4ae9e2c37a862bed34af48a41570e2c9/style.css
 #EXTINF:-1 tvg-id="hbo" tvg-logo="https://cdn-icons-png.flaticon.com/512/5968/5968668.png",Hbo
-https://d3fad7d3634dbfb61018813546edbccb.cloudflaire.lat/assets/themes/embedtv_5b0c14df517ee28660322ed85f2250f5/style.css
+https://825f9cd5f0390bc77c1fed3c94885c87.cloudflaire.lat/assets/themes/embedtv_717585af0c0c692f777e0a6a8ab32ef5/style.css
 #EXTINF:-1 tvg-id="hbo2" tvg-logo="https://cdn.freebiesupply.com/logos/large/2x/hbo-2-logo-png-transparent.png",Hbo2
-https://d3fad7d3634dbfb61018813546edbccb.cloudflaire.lat/assets/themes/embedtv_fba9747865a030e3445decd75501ba0e/style.css
+https://825f9cd5f0390bc77c1fed3c94885c87.cloudflaire.lat/assets/themes/embedtv_e60eba23768080f80f3dfef37d02a21e/style.css
 #EXTINF:-1 tvg-id="hboxtreme",HBO Xtreme
-https://d3fad7d3634dbfb61018813546edbccb.cloudflaire.lat/assets/themes/embedtv_bd39b7f7d1ee032e5bae339a119d2dda/style.css
+https://825f9cd5f0390bc77c1fed3c94885c87.cloudflaire.lat/assets/themes/embedtv_52024285b299cfce055800480fc77f47/style.css
 #EXTINF:-1 tvg-id="hbofamily",HBO Family
-https://d3fad7d3634dbfb61018813546edbccb.cloudflaire.lat/assets/themes/embedtv_8ad0b8aea0fd07af3624b66883b8d1d5/style.css
+https://825f9cd5f0390bc77c1fed3c94885c87.cloudflaire.lat/assets/themes/embedtv_5898c295ef64118663d8f92f0b69307e/style.css
 #EXTINF:-1 tvg-id="hbomundi",HBO Mundi
-https://d3fad7d3634dbfb61018813546edbccb.cloudflaire.lat/assets/themes/embedtv_34f0918f4faf40d42d2f92c4a9f60736/style.css
+https://825f9cd5f0390bc77c1fed3c94885c87.cloudflaire.lat/assets/themes/embedtv_e52267ec3f2930e3fdc9922b4adfe0eb/style.css
 #EXTINF:-1 tvg-id="hbopop",HBO Pop
-https://d3fad7d3634dbfb61018813546edbccb.cloudflaire.lat/assets/themes/embedtv_3af370ccbadf9c4479fb5a86bb5449a5/style.css
+https://825f9cd5f0390bc77c1fed3c94885c87.cloudflaire.lat/assets/themes/embedtv_853338d1a5c0afc693e2589730629f2a/style.css
 #EXTINF:-1 tvg-id="hboplus",HBO Plus
-https://d3fad7d3634dbfb61018813546edbccb.cloudflaire.lat/assets/themes/embedtv_59eefbc599c1f56eba5124259eeeae5a/style.css
+https://825f9cd5f0390bc77c1fed3c94885c87.cloudflaire.lat/assets/themes/embedtv_c159da9edb4a9c3249ec5a0896fee7d7/style.css
 #EXTINF:-1 tvg-id="megapix" tvg-logo="https://github.com/tv-logo/tv-logos/blob/main/countries/brazil/megapix-br.png?raw=true",Megapix
-https://d3fad7d3634dbfb61018813546edbccb.cloudflaire.lat/assets/themes/embedtv_cfc81ab2a12de65dd8d1f87df1519e51/style.css
+https://825f9cd5f0390bc77c1fed3c94885c87.cloudflaire.lat/assets/themes/embedtv_1db1be71a8a80240faf17293b3e1bb8a/style.css
 #EXTINF:-1 tvg-id="space" tvg-logo="https://github.com/tv-logo/tv-logos/blob/main/countries/brazil/space-br.png?raw=true",Space
-https://d3fad7d3634dbfb61018813546edbccb.cloudflaire.lat/assets/themes/embedtv_0786ee2bf22698c9608261db683a1746/style.css
+https://825f9cd5f0390bc77c1fed3c94885c87.cloudflaire.lat/assets/themes/embedtv_8c4122386c77e33a953378599688ef20/style.css
 #EXTINF:-1 tvg-id="tnt" tvg-logo="https://github.com/tv-logo/tv-logos/blob/main/countries/poland/tnt-pl.png?raw=true",Tnt
-https://d3fad7d3634dbfb61018813546edbccb.cloudflaire.lat/assets/themes/embedtv_f4c6555f73f7c956a1d8e209d1529764/style.css
+https://825f9cd5f0390bc77c1fed3c94885c87.cloudflaire.lat/assets/themes/embedtv_feb530f0ba10710687dff02bd0ff33d6/style.css
 #EXTINF:-1 tvg-id="tntseries" tvg-logo="https://github.com/tv-logo/tv-logos/blob/main/countries/brazil/tnt-series-br.png?raw=true",Tnt Series
-https://d3fad7d3634dbfb61018813546edbccb.cloudflaire.lat/assets/themes/embedtv_daa9e07eb916a5d00328355ed8cd166d/style.css
+https://825f9cd5f0390bc77c1fed3c94885c87.cloudflaire.lat/assets/themes/embedtv_8c7c6d1dfe2b7af00522d1adcd73c332/style.css
 #EXTINF:-1 tvg-id="tntnovelas" tvg-logo="https://github.com/tv-logo/tv-logos/blob/main/countries/world-latin-america/tnt-novelas-lam.png?raw=true",Tnt Novelas
-https://d3fad7d3634dbfb61018813546edbccb.cloudflaire.lat/assets/themes/embedtv_bd4852a4cc81ca469752e6bee060d5a8/style.css
+https://825f9cd5f0390bc77c1fed3c94885c87.cloudflaire.lat/assets/themes/embedtv_2be97a9dd28a708b2691f0b7b041fbaa/style.css
 #EXTINF:-1 tvg-id="universaltv" tvg-logo="https://github.com/tv-logo/tv-logos/blob/main/countries/brazil/universal-tv-br.png?raw=true",Universal
-https://d3fad7d3634dbfb61018813546edbccb.cloudflaire.lat/assets/themes/embedtv_37fef0714fe005869d44f1411f022cf8/style.css
+https://825f9cd5f0390bc77c1fed3c94885c87.cloudflaire.lat/assets/themes/embedtv_e19f88c386e06474a096fe58657f34f7/style.css
 #EXTINF:-1 tvg-id="studiouniversal",Studio Universal
-https://d3fad7d3634dbfb61018813546edbccb.cloudflaire.lat/assets/themes/embedtv_78cb13f6f87ad0457b5a196205521ccc/style.css
+https://825f9cd5f0390bc77c1fed3c94885c87.cloudflaire.lat/assets/themes/embedtv_e957de991fe5ab4afc480265762f70a8/style.css
 #EXTINF:-1 tvg-id="warnerchannel" tvg-logo="https://github.com/tv-logo/tv-logos/blob/main/countries/brazil/warner-channel-br.png?raw=true",Warner Channel
-https://d3fad7d3634dbfb61018813546edbccb.cloudflaire.lat/assets/themes/embedtv_24346c44f4a5e46cfb2988015b58a4b5/style.css
+https://825f9cd5f0390bc77c1fed3c94885c87.cloudflaire.lat/assets/themes/embedtv_2ef98430a65f23a5806580e0d5e694db/style.css
 #EXTINF:-1 tvg-id="cinemax" tvg-logo="https://github.com/tv-logo/tv-logos/blob/main/countries/brazil/cinemax-br.png?raw=true",Cinemax
-https://d3fad7d3634dbfb61018813546edbccb.cloudflaire.lat/assets/themes/embedtv_0ee10763ee7b233e262ad4a691524e54/style.css
+https://825f9cd5f0390bc77c1fed3c94885c87.cloudflaire.lat/assets/themes/embedtv_83a53b644369d68c27a5f2cb94f58133/style.css
 #EXTINF:-1 tvg-id="sportv" tvg-logo="https://github.com/tv-logo/tv-logos/blob/main/countries/brazil/sportv-br.png?raw=true",Sportv
-https://d3fad7d3634dbfb61018813546edbccb.cloudflaire.lat/assets/themes/embedtv_2ddde8b45f7770c04bb82ada9b191006/style.css
+https://825f9cd5f0390bc77c1fed3c94885c87.cloudflaire.lat/assets/themes/embedtv_93fd79b19b460e61175e080f8757e50e/style.css
 #EXTINF:-1 tvg-id="sportv2" tvg-logo="https://github.com/tv-logo/tv-logos/blob/main/countries/brazil/sportv2-br.png?raw=true",Sportv2
-https://d3fad7d3634dbfb61018813546edbccb.cloudflaire.lat/assets/themes/embedtv_cc106fc5da01855ed139678014d34158/style.css
+https://825f9cd5f0390bc77c1fed3c94885c87.cloudflaire.lat/assets/themes/embedtv_6b063a67ece12762ccd6b1ddc0fe8ddb/style.css
 #EXTINF:-1 tvg-id="sportv3" tvg-logo="https://github.com/tv-logo/tv-logos/blob/main/countries/brazil/sportv3-br.png?raw=true",Sportv3
-https://d3fad7d3634dbfb61018813546edbccb.cloudflaire.lat/assets/themes/embedtv_0de65978319a1473f95db4417f01fa4b/style.css
+https://825f9cd5f0390bc77c1fed3c94885c87.cloudflaire.lat/assets/themes/embedtv_a6bf85eff08cff843f73c4e79327511f/style.css
 #EXTINF:-1 tvg-id="xsports",X Sports
-https://d3fad7d3634dbfb61018813546edbccb.cloudflaire.lat/assets/themes/embedtv_6829dc317f851269c803477e560589cd/style.css
+https://825f9cd5f0390bc77c1fed3c94885c87.cloudflaire.lat/assets/themes/embedtv_30fa998cdbdd0413e698fedc9592bac5/style.css
 #EXTINF:-1 tvg-id="espn" tvg-logo="https://github.com/tv-logo/tv-logos/blob/main/countries/argentina/espn-ar.png?raw=true",Espn
-https://d3fad7d3634dbfb61018813546edbccb.cloudflaire.lat/assets/themes/embedtv_0ccabf5c0984aa8295fc7001b9064cc1/style.css
+https://825f9cd5f0390bc77c1fed3c94885c87.cloudflaire.lat/assets/themes/embedtv_b40b7d2acc675cf9628e819e286b0f60/style.css
 #EXTINF:-1 tvg-id="espn2" tvg-logo="https://github.com/tv-logo/tv-logos/blob/main/countries/argentina/espn-2-ar.png?raw=true",Espn2
-https://d3fad7d3634dbfb61018813546edbccb.cloudflaire.lat/assets/themes/embedtv_edf3cfcde97455a8b86899d35c6aa878/style.css
+https://825f9cd5f0390bc77c1fed3c94885c87.cloudflaire.lat/assets/themes/embedtv_7664f1e933eb9285ab37c2f8848d84d7/style.css
 #EXTINF:-1 tvg-id="espn3" tvg-logo="https://github.com/tv-logo/tv-logos/blob/main/countries/argentina/espn-3-ar.png?raw=true",Espn3
-https://d3fad7d3634dbfb61018813546edbccb.cloudflaire.lat/assets/themes/embedtv_17968d9458fbf01a61c6a59296af3502/style.css
+https://825f9cd5f0390bc77c1fed3c94885c87.cloudflaire.lat/assets/themes/embedtv_3c51e47dbc1f80ddd031c82c364ebcda/style.css
 #EXTINF:-1 tvg-id="espn4",Espn4
-https://d3fad7d3634dbfb61018813546edbccb.cloudflaire.lat/assets/themes/embedtv_02eed281de0a82ae53dc83505c78514a/style.css
+https://825f9cd5f0390bc77c1fed3c94885c87.cloudflaire.lat/assets/themes/embedtv_9d3196bfb0a2c8d04e0f0f09e0ca31f5/style.css
 #EXTINF:-1 tvg-id="espn5",Espn5
-https://d3fad7d3634dbfb61018813546edbccb.cloudflaire.lat/assets/themes/embedtv_8943f0720e2f998c5dcd7f31483848b7/style.css
+https://825f9cd5f0390bc77c1fed3c94885c87.cloudflaire.lat/assets/themes/embedtv_301d9d26a8a4b81a069a1abfb8f82ed2/style.css
 #EXTINF:-1 tvg-id="espn6",Espn6
-https://d3fad7d3634dbfb61018813546edbccb.cloudflaire.lat/assets/themes/embedtv_cc7eff3c23df6a0b3a6c46b6126bb64d/style.css
+https://825f9cd5f0390bc77c1fed3c94885c87.cloudflaire.lat/assets/themes/embedtv_68af4618c5b4d202e39a51a06958299d/style.css
 #EXTINF:-1 tvg-id="bandsports",Band sports
-https://d3fad7d3634dbfb61018813546edbccb.cloudflaire.lat/assets/themes/embedtv_8aa2967a48fdaa7b7d1ed840f003347e/style.css
+https://825f9cd5f0390bc77c1fed3c94885c87.cloudflaire.lat/assets/themes/embedtv_01d69fa3008340594bba3fbcc423ebe8/style.css
 #EXTINF:-1 tvg-id="combate",Combate
-https://d3fad7d3634dbfb61018813546edbccb.cloudflaire.lat/assets/themes/embedtv_ae878dceaae39a3add31e13dc83151b6/style.css
+https://825f9cd5f0390bc77c1fed3c94885c87.cloudflaire.lat/assets/themes/embedtv_61077b6a4cd9a1d9abf5bf2f1a6f4f14/style.css
 #EXTINF:-1 tvg-id="paramountplus" tvg-logo="https://github.com/tv-logo/tv-logos/blob/main/misc/media/paramount-plus.png?raw=true",Paramount Plus
-https://d3fad7d3634dbfb61018813546edbccb.cloudflaire.lat/assets/themes/embedtv_f4fa5689543b85d87425b70b5a8b8f3d/style.css
+https://825f9cd5f0390bc77c1fed3c94885c87.cloudflaire.lat/assets/themes/embedtv_28913a1feed3f728dc519d093698e7f2/style.css
 #EXTINF:-1 tvg-id="paramountplus2" tvg-logo="https://github.com/tv-logo/tv-logos/blob/main/countries/ukraine/m-paramount-plus-2-hd-ua.png?raw=true",Paramount Plus 2
-https://d3fad7d3634dbfb61018813546edbccb.cloudflaire.lat/assets/themes/embedtv_fd142ad81c92b0224b52f183ac9d2c68/style.css
+https://825f9cd5f0390bc77c1fed3c94885c87.cloudflaire.lat/assets/themes/embedtv_63c38d5a5efeb161f0aa98177a05df9f/style.css
 #EXTINF:-1 tvg-id="premiere" tvg-logo="https://github.com/tv-logo/tv-logos/blob/main/countries/brazil/premiere-br.png?raw=true",Premiere
-https://d3fad7d3634dbfb61018813546edbccb.cloudflaire.lat/assets/themes/embedtv_48aa79482a40ef073ad03686156efe63/style.css
+https://825f9cd5f0390bc77c1fed3c94885c87.cloudflaire.lat/assets/themes/embedtv_e5795f3fc2fe81a9c29abe1ef1560f58/style.css
 #EXTINF:-1 tvg-id="premiere2" tvg-logo="https://github.com/tv-logo/tv-logos/blob/main/countries/brazil/premiere-br.png?raw=true",Premiere 2
-https://d3fad7d3634dbfb61018813546edbccb.cloudflaire.lat/assets/themes/embedtv_cd5b5822efad99ea97dcfbf3c06e20eb/style.css
+https://825f9cd5f0390bc77c1fed3c94885c87.cloudflaire.lat/assets/themes/embedtv_f33462bd9d4c92d11f380d6348458545/style.css
 #EXTINF:-1 tvg-id="premiere3" tvg-logo="https://github.com/tv-logo/tv-logos/blob/main/countries/brazil/premiere-br.png?raw=true",Premiere 3
-https://d3fad7d3634dbfb61018813546edbccb.cloudflaire.lat/assets/themes/embedtv_d8b15ef0f9279ecfe106217899e70838/style.css
+https://825f9cd5f0390bc77c1fed3c94885c87.cloudflaire.lat/assets/themes/embedtv_10e209b61252b408f3d131c5af86e2ac/style.css
 #EXTINF:-1 tvg-id="premiere4" tvg-logo="https://github.com/tv-logo/tv-logos/blob/main/countries/brazil/premiere-br.png?raw=true",Premiere 4
-https://d3fad7d3634dbfb61018813546edbccb.cloudflaire.lat/assets/themes/embedtv_107b6710bb8d579925389fa2490eb328/style.css
+https://825f9cd5f0390bc77c1fed3c94885c87.cloudflaire.lat/assets/themes/embedtv_532f3933a25ce4036f23be66414c7e09/style.css
 #EXTINF:-1 tvg-id="premiere5" tvg-logo="https://github.com/tv-logo/tv-logos/blob/main/countries/brazil/premiere-br.png?raw=true",Premiere 5
-https://d3fad7d3634dbfb61018813546edbccb.cloudflaire.lat/assets/themes/embedtv_1c24a98c4d4c1a39207cb0f25f4509ec/style.css
+https://825f9cd5f0390bc77c1fed3c94885c87.cloudflaire.lat/assets/themes/embedtv_6ce196626e88f6116450557e6b9ea370/style.css
 #EXTINF:-1 tvg-id="premiere6" tvg-logo="https://github.com/tv-logo/tv-logos/blob/main/countries/brazil/premiere-br.png?raw=true",Premiere 6
-https://d3fad7d3634dbfb61018813546edbccb.cloudflaire.lat/assets/themes/embedtv_4d39ca87a811be67bf4a2c6d0f052ce9/style.css
+https://825f9cd5f0390bc77c1fed3c94885c87.cloudflaire.lat/assets/themes/embedtv_cb1202d93a93305bbc6ed1fd7ff52c2e/style.css
 #EXTINF:-1 tvg-id="premiere7" tvg-logo="https://github.com/tv-logo/tv-logos/blob/main/countries/brazil/premiere-br.png?raw=true",Premiere 7
 https://d3fad7d3634dbfb61018813546edbccb.cloudflaire.lat/assets/themes/embedtv_a0f00863d6221f765ee2b8bc717635b5/style.css
 #EXTINF:-1 tvg-id="premiere8" tvg-logo="https://github.com/tv-logo/tv-logos/blob/main/countries/brazil/premiere-br.png?raw=true",Premiere 8
-https://d3fad7d3634dbfb61018813546edbccb.cloudflaire.lat/assets/themes/embedtv_4758056ec2046491194b1dbe4c4c9d32/style.css
+https://825f9cd5f0390bc77c1fed3c94885c87.cloudflaire.lat/assets/themes/embedtv_7523ada913b3968dfe9b9fbca9b1652d/style.css
 #EXTINF:-1 tvg-id="disneyplus1",Disney plus 1
-https://d3fad7d3634dbfb61018813546edbccb.cloudflaire.lat/assets/themes/embedtv_8c4177bf5bfcc81b68f9ce62ea0d2512/style.css
+https://825f9cd5f0390bc77c1fed3c94885c87.cloudflaire.lat/assets/themes/embedtv_23c3ec83dcde97a9ed62779a4a4bc557/style.css
 #EXTINF:-1 tvg-id="globoce" tvg-logo="https://github.com/tv-logo/tv-logos/blob/main/countries/brazil/globo-br.png?raw=true",Globo TV Verdes Mares
-https://d3fad7d3634dbfb61018813546edbccb.cloudflaire.lat/assets/themes/embedtv_d5f7756e0a15cf785faa5bad2f70ff47/style.css
+https://825f9cd5f0390bc77c1fed3c94885c87.cloudflaire.lat/assets/themes/embedtv_701bf3500bb2d6948143c7ffd525f0b4/style.css
 #EXTINF:-1 tvg-id="globonews",Globo News
-https://d3fad7d3634dbfb61018813546edbccb.cloudflaire.lat/assets/themes/embedtv_8c4f0d412067d73ce7fdcdffcba0f9e5/style.css
+https://825f9cd5f0390bc77c1fed3c94885c87.cloudflaire.lat/assets/themes/embedtv_c1308317ca44210aa4616e1700e6ead3/style.css
 #EXTINF:-1 tvg-id="cnnbrasil",CNN brasil
-https://d3fad7d3634dbfb61018813546edbccb.cloudflaire.lat/assets/themes/embedtv_da307eac26726a214dc80bf6bdd48b0f/style.css
+https://825f9cd5f0390bc77c1fed3c94885c87.cloudflaire.lat/assets/themes/embedtv_7921f4f00597eb710c0966b2e1b53087/style.css
 #EXTINF:-1 tvg-id="bandnews",Band News
-https://d3fad7d3634dbfb61018813546edbccb.cloudflaire.lat/assets/themes/embedtv_3debfbb136acfc03a5568f734bf3ceec/style.css
+https://825f9cd5f0390bc77c1fed3c94885c87.cloudflaire.lat/assets/themes/embedtv_a6f63e0fe3ee4e65ee57592f9188f17a/style.css
